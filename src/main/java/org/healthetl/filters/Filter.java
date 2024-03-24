@@ -1,7 +1,7 @@
-package org.components.filters;
+package org.healthetl.filters;
 
 
-import org.components.connectors.Pipe;
+import org.healthetl.connectors.Pipe;
 
 public abstract class Filter implements Runnable{
 

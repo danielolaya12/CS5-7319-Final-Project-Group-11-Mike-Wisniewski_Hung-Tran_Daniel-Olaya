@@ -1,4 +1,4 @@
-package org.components.connectors;
+package org.healthetl.connectors;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

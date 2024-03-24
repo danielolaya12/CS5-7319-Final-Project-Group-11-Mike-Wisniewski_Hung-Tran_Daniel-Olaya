@@ -1,8 +1,8 @@
-package org.components;
+package org.healthetl;
 
-import org.components.connectors.Pipe;
-import org.components.filters.ApiReader;
-import org.components.filters.Filter;
+import org.healthetl.connectors.Pipe;
+import org.healthetl.filters.ApiReader;
+import org.healthetl.filters.Filter;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,6 +11,7 @@ public class Main {
         startFilters(filters);
     }
 
+    //Set single output
     public static void setOut(Filter[] filters){
         Pipe p = new Pipe();
         for(Filter filer: filters){
