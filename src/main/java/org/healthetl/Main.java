@@ -2,11 +2,14 @@ package org.healthetl;
 
 import org.healthetl.connectors.Pipe;
 import org.healthetl.filters.ApiReader;
+import org.healthetl.filters.CsvReader;
+import org.healthetl.filters.MSSQLPipeline;
+import org.healthetl.filters.PostgresPipeline;
 import org.healthetl.filters.Filter;
 
 public class Main {
     public static void main(String[] args) {
-        Filter[] filters = new Filter[] {new ApiReader(), new ApiReader()};
+        Filter[] filters = new Filter[] {new PostgresPipeline()};
         setOut(filters);
         startFilters(filters);
     }

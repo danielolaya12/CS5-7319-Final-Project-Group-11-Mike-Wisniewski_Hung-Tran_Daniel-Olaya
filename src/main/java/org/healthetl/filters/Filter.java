@@ -1,6 +1,5 @@
 package org.healthetl.filters;
 
-
 import org.healthetl.connectors.Pipe;
 
 public abstract class Filter implements Runnable{

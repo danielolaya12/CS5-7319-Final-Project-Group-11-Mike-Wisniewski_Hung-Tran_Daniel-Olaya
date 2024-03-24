@@ -23,6 +23,7 @@ public class CsvReader extends Filter{
             for (CSVRecord csvRecord : csvParser) {
                 JSONObject jsonObject = new JSONObject();
                 for (String header : csvParser.getHeaderNames()) {
+                    System.out.println(header);
                     jsonObject.put(header, csvRecord.get(header));
                 }
                 jsonArray.add(jsonObject);
@@ -32,6 +33,6 @@ public class CsvReader extends Filter{
             e.printStackTrace();
         }
 
-        System.out.println(jsonArray.toJSONString());
+        // System.out.println(jsonArray.toJSONString());
     }
 }
