@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class CsvReader extends Filter{
-
     public void run (){
         readCsv();
     }
