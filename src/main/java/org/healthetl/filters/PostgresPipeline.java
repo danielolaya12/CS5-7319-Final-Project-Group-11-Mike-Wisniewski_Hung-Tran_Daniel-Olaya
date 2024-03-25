@@ -20,11 +20,11 @@ public class PostgresPipeline extends Filter {
     }
 
     // JDBC URL, username, and password of PostgreSQL server
-    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/catcards";
-    private static final String JDBC_USER = "postgres";
-    private static final String JDBC_PASSWORD = "postgres1";
+    private final String JDBC_URL = "jdbc:postgresql://localhost:5432/catcards";
+    private final String JDBC_USER = "postgres";
+    private final String JDBC_PASSWORD = "postgres1";
 
-    public static void fetchData() {
+    public void fetchData() {
 
         // initialize json array
         JSONArray jsonArray = new JSONArray();
@@ -53,10 +53,8 @@ public class PostgresPipeline extends Filter {
                 }
                 // add the JSON object representing a row to the array
                 jsonArray.add(jsonObject);
+                output.write(jsonObject);
             }
-
-            System.out.println(jsonArray);
-            
         } catch (SQLException e) {
             System.err.println("Failed to connect to the PostgreSQL server.");
             e.printStackTrace();

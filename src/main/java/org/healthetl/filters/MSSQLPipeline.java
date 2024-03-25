@@ -15,15 +15,14 @@ public class MSSQLPipeline extends Filter {
 
     // main run
     public void run() {
-        
         // run fetch logic
         fetchData();
     }
 
     // jdbc url for connecting to SQL Server
-    private static final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
+    private final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
 
-    public static void fetchData() {
+    public void fetchData() {
 
         // initialize json array
         JSONArray jsonArray = new JSONArray();
@@ -52,6 +51,7 @@ public class MSSQLPipeline extends Filter {
                     }
                     // add the JSON object representing a row to the array
                     jsonArray.add(jsonObject);
+                    output.write(jsonObject);
                 }
  
                 System.out.println(jsonArray);

@@ -1,17 +1,21 @@
 package org.healthetl;
 
 import org.healthetl.connectors.Pipe;
-import org.healthetl.filters.ApiReader;
-import org.healthetl.filters.CsvReader;
-import org.healthetl.filters.MSSQLPipeline;
-import org.healthetl.filters.PostgresPipeline;
-import org.healthetl.filters.Filter;
+import org.healthetl.filters.*;
 
 public class Main {
     public static void main(String[] args) {
-        Filter[] filters = new Filter[] {new PostgresPipeline()};
-        setOut(filters);
+        Filter[] filters = new Filter[] {new ApiReader(), new CsvReader()};
+//        setOut(filters);
+        Pipe p = new Pipe();
+        for(Filter filer: filters){
+            filer.setOut(p);
+        }
+        DataTypeInferer inferer = new DataTypeInferer();
+        inferer.setIn(p);
         startFilters(filters);
+        Thread thread = new Thread(inferer);
+        thread.start();
     }
 
     //Set single output
