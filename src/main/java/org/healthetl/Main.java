@@ -9,9 +9,30 @@ import org.healthetl.filters.Filter;
 
 public class Main {
     public static void main(String[] args) {
+
         Filter[] filters = new Filter[] {new PostgresPipeline()};
         setOut(filters);
         startFilters(filters);
+
+        // beginScheduler(while (time != 1PM)){
+        //     {
+            // Starts Pipelines
+            //     Message msg_API = C2Connector_Downstream("Start API");
+            //     Message msg_CSV = C2Connector_Downstream("Start CSV");
+            //     Message msg_MSSQL = C2Connector_Downstream("Start MSSQL");
+
+            // Stops Scheduler
+            //     C2Connector_Upstream(msg_API);
+            //     C2Connector_Upstream(msg_CSV);
+            //     C2Connector_Upstream(msg_MSSQL);
+
+        //         Filter[] filters = new Filter[] {new PostgresPipeline()};
+        //         setOut(filters);
+        //         startFilters(filters);
+        //     }
+            
+        // }
+        
     }
 
     //Set single output
