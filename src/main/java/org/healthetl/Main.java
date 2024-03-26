@@ -1,38 +1,21 @@
 package org.healthetl;
 
 import org.healthetl.connectors.Pipe;
-import org.healthetl.filters.ApiReader;
-import org.healthetl.filters.CsvReader;
-import org.healthetl.filters.MSSQLPipeline;
-import org.healthetl.filters.PostgresPipeline;
-import org.healthetl.filters.Filter;
+import org.healthetl.filters.*;
 
 public class Main {
     public static void main(String[] args) {
-
-        Filter[] filters = new Filter[] {new PostgresPipeline()};
-        setOut(filters);
+        Filter[] filters = new Filter[] {new ApiReader(), new CsvReader()};
+//        setOut(filters);
+        Pipe p = new Pipe();
+        for(Filter filer: filters){
+            filer.setOut(p);
+        }
+        DataTypeInferer inferer = new DataTypeInferer();
+        inferer.setIn(p);
         startFilters(filters);
-
-        // beginScheduler(while (time != 1PM)){
-        //     {
-            // Starts Pipelines
-            //     Message msg_API = C2Connector_Downstream("Start API");
-            //     Message msg_CSV = C2Connector_Downstream("Start CSV");
-            //     Message msg_MSSQL = C2Connector_Downstream("Start MSSQL");
-
-            // Stops Scheduler
-            //     C2Connector_Upstream(msg_API);
-            //     C2Connector_Upstream(msg_CSV);
-            //     C2Connector_Upstream(msg_MSSQL);
-
-        //         Filter[] filters = new Filter[] {new PostgresPipeline()};
-        //         setOut(filters);
-        //         startFilters(filters);
-        //     }
-            
-        // }
-        
+        Thread thread = new Thread(inferer);
+        thread.start();
     }
 
     //Set single output
@@ -57,3 +40,23 @@ public class Main {
         }
     }
 }
+
+
+        // beginScheduler(while (time != 1PM)){
+        //     {
+            // Starts Pipelines
+            //     Message msg_API = C2Connector_Downstream("Start API");
+            //     Message msg_CSV = C2Connector_Downstream("Start CSV");
+            //     Message msg_MSSQL = C2Connector_Downstream("Start MSSQL");
+
+            // Stops Scheduler
+            //     C2Connector_Upstream(msg_API);
+            //     C2Connector_Upstream(msg_CSV);
+            //     C2Connector_Upstream(msg_MSSQL);
+
+        //         Filter[] filters = new Filter[] {new PostgresPipeline()};
+        //         setOut(filters);
+        //         startFilters(filters);
+        //     }
+            
+        // }
