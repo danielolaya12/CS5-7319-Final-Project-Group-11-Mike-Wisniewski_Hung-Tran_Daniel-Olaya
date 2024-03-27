@@ -4,18 +4,20 @@ import org.healthetl.filters.CsvReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.LinkedList;
+
 public class Pipe {
-    private JSONArray jsonArray = new JSONArray();
+    LinkedList<JSONObject> jsonArray = new LinkedList<>();
     public synchronized void write(JSONObject jsonObject) {
         jsonArray.add(jsonObject);
         notify();
     }
 
-    public synchronized String read() throws InterruptedException {
+    public synchronized JSONObject read() throws InterruptedException {
         while (jsonArray.isEmpty()) {
             wait();
         }
-        return jsonArray.removeFirst().toString();
+        return jsonArray.removeFirst();
     }
 }
 
