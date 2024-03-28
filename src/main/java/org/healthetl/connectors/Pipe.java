@@ -1,7 +1,5 @@
 package org.healthetl.connectors;
 
-import org.healthetl.filters.CsvReader;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
@@ -18,6 +16,18 @@ public class Pipe {
             wait();
         }
         return jsonArray.removeFirst();
+    }
+
+    public synchronized void notifyThreads(){
+        try {
+            if (Thread.holdsLock(this)) {
+                notify();
+            } else {
+                System.out.println("Current thread does not own the lock on the Pipe object.");
+            }
+        } catch (Exception e){
+
+        }
     }
 }
 

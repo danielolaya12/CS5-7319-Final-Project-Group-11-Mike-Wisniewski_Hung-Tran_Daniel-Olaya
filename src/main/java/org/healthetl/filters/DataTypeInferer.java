@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class DataTypeInferer extends Filter{
-    ArrayList<String> jsonList = new ArrayList<>();
-    String readerService;
+    private final ArrayList<String> jsonList = new ArrayList<>();
+    private final String readerService;
     public DataTypeInferer(String readerService){
         this.readerService = readerService;
     }
@@ -22,27 +22,28 @@ public class DataTypeInferer extends Filter{
         try {
             System.out.println("======== Reading =========" + readerService + "=========");
             JSONObject json;
-            while((json = input.read()) != null){
-                jsonList.add(json.toJSONString());
-                System.out.println(readerService + "------" + json.toJSONString());
+            String filename = readerService + ".txt";
+            try(FileWriter myWriter = new FileWriter(filename)) {
+                while ((json = input.read()) != null) {
+                    myWriter.write(json + "\n");
+                }
             }
+            System.out.println("Finished writing to CSV");
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     public void writeToFile(){
-        try {
-            System.out.println("======== Filter  Text File =========" + readerService + "=========");
-            FileWriter myWriter = new FileWriter(readerService + ".txt");
-            for (String json: jsonList){
-                myWriter.write(json + "\n");
+        String filename = readerService + ".txt";
+        try(FileWriter myWriter = new FileWriter(filename)){
+            synchronized (jsonList){
+                for(String word : jsonList) {
+                    myWriter.write(word + "\n");
+                }
             }
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        } catch( IOException e ) {
+            System.out.println("Error writing to file");
         }
     }
 }

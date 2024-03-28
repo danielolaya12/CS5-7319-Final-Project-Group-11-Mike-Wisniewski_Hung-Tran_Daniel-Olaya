@@ -24,8 +24,10 @@ public class CsvReader extends Filter{
                 }
                 output.write(jsonObject);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            Thread.sleep(2000);
+            output.notifyThreads();
+        } catch (IOException | InterruptedException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

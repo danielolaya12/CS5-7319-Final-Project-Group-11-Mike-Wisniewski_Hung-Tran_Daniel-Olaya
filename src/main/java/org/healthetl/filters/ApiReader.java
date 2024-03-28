@@ -31,6 +31,8 @@ public class ApiReader extends Filter {
                     JSONObject jsonObject = (JSONObject) obj;
                     output.write(jsonObject);
                 }
+                //Thread.sleep(2000);
+                output.notifyThreads();
             } else {
                 System.out.println("HTTP request failed with status code: " + response.statusCode());
             }
