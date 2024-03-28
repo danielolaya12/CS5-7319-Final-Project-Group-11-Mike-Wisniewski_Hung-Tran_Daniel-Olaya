@@ -40,7 +40,6 @@ public class S3Reader extends Filter {
 
     @Override
     public void run() {
-        JSONArray jsonArray = new JSONArray();
         try (S3Object s3Object = s3Client.getObject(bucketName, key);
              S3ObjectInputStream inputStream = s3Object.getObjectContent();
              Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -49,13 +48,13 @@ public class S3Reader extends Filter {
             for (CSVRecord csvRecord : csvParser) {
                 JSONObject jsonObject = new JSONObject();
                 csvParser.getHeaderNames().forEach(header -> jsonObject.put(header, csvRecord.get(header)));
-                jsonArray.add(jsonObject);
+                output.write(jsonObject);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println(jsonArray.toJSONString());
+
     }
 }
