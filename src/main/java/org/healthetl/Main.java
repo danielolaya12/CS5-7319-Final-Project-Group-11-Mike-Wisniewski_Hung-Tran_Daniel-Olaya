@@ -28,6 +28,16 @@ public class Main {
         t3.start();
         t4.start();
 
+        S3Reader s3Reader = new S3Reader("", "", "7319-software-architecture", "healthcare_dataset.csv");
+        Pipe s3Pipe = new Pipe();
+        DataTypeInferer s3Inferer = new DataTypeInferer("s3Data");
+        s3Reader.setOut(s3Pipe);
+        s3Inferer.setIn(s3Pipe);
+        Thread t5 = new Thread(s3Reader);
+        Thread t6 = new Thread(s3Inferer);
+        t5.start();
+        t6.start();
+
         System.out.println("All threads have completed");
     }
 
