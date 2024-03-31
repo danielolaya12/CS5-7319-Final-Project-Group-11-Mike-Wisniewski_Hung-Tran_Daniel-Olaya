@@ -52,6 +52,7 @@ public class MSSQLPipeline extends Filter {
                     // add the JSON object representing a row to the array
                     jsonArray.add(jsonObject);
                     output.write(jsonObject);
+                    output.notifyThreads();
                 }
  
                 System.out.println(jsonArray);
