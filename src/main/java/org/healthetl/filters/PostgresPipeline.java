@@ -54,6 +54,7 @@ public class PostgresPipeline extends Filter {
                 // add the JSON object representing a row to the array
                 jsonArray.add(jsonObject);
                 output.write(jsonObject);
+                output.notifyThreads();
             }
         } catch (SQLException e) {
             System.err.println("Failed to connect to the PostgreSQL server.");
