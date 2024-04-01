@@ -223,10 +223,8 @@ public class SchemaDefinition {
         }
     }
 
-    public static void main(String[] args) {
-        // String jsonInput = args[0];
-        String jsonInput = "[{\"code\":\"15777000\",\"stop\":\"2012-12-08\",\"patient\":\"8b9de29c-34c9-405f-840c-71b5210cf9e1\",\"start\":\"2003-04-03\",\"description\":\"Prediabetes\",\"encounter\":\"c8fa6e8f-5557-4316-90cc-f27d1d76de7a\"},\n" +
-        "{\"code\":\"10509002\",\"stop\":\"2012-12-08\",\"patient\":\"8b9de29c-34c9-405f-840c-71b5210cf9e1\",\"start\":\"2012-11-27\",\"description\":\"Acute bronchitis (disorder)\",\"encounter\":\"e277ecc6-5cbf-4b8f-958c-cdbd171269c3\"}]";
+    public static void main(String string) {
+        String jsonInput = string;
         String s3BucketName = "cs7319";
         String s3SchemaPath = "schema_log/schema_definition.json";
         try {

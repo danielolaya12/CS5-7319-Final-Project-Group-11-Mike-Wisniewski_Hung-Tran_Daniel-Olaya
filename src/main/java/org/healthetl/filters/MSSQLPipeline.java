@@ -9,8 +9,6 @@ import java.sql.ResultSetMetaData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import netscape.javascript.JSObject;
-
 public class MSSQLPipeline extends Filter {
 
     // main run
@@ -22,7 +20,7 @@ public class MSSQLPipeline extends Filter {
     // jdbc url for connecting to SQL Server
     private final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
 
-    public void fetchData() {
+    public JSONArray fetchData() {
 
         // initialize json array
         JSONArray jsonArray = new JSONArray();
@@ -51,13 +49,14 @@ public class MSSQLPipeline extends Filter {
                     }
                     // add the JSON object representing a row to the array
                     jsonArray.add(jsonObject);
-                    output.write(jsonObject);
+                    // output.write(jsonObject);
                 }
  
-                System.out.println(jsonArray);
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+        return jsonArray;
         }
+
     }
