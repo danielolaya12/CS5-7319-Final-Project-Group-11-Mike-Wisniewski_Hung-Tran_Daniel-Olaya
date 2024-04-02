@@ -13,6 +13,9 @@ import javax.xml.crypto.Data;
 import org.healthetl.connectors.C2;
 import org.healthetl.connectors.Pipe;
 import org.healthetl.filters.*;
+import org.json.simple.JSONObject;
+
+import com.amazonaws.regions.Regions;
 
 
 public class Main {
@@ -82,7 +85,19 @@ public class Main {
 
         System.out.println("All threads have completed");
 
-        
+        // S3 Writer
+        String bucketName = "cs7319/curated/medical/data.csv";
+        String accessKey = "";
+        String secretKey = "";
+        Regions region = Regions.US_EAST_1;
+        S3Writer s3Writer = new S3Writer(bucketName, accessKey, secretKey, region);
+        // Create a mock JSONObject
+        JSONObject jsonData = new JSONObject();
+        jsonData.put("name", "John");
+        jsonData.put("age", 30);
+        jsonData.put("city", "New York");
+        // JSONObject jsonData =
+        s3Writer.writeToS3(jsonData);    
     }
 
     //Set single output
