@@ -57,6 +57,7 @@ public class MSSQLPipeline extends Filter {
                 e.printStackTrace();
             }
 
+        System.out.println(jsonArray);
         return jsonArray;
         }
 

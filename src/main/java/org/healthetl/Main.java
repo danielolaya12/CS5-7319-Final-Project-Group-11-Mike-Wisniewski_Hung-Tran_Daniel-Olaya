@@ -1,5 +1,13 @@
 package org.healthetl;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 import javax.xml.crypto.Data;
 
 import org.healthetl.connectors.C2;
@@ -64,15 +72,17 @@ public class Main {
         // t10.start();
 
         // Setup MSSQL Pipe and Filter
-        C2 mssqlC2 = new C2();
+        C2 mainC2 = new C2();
 
         // downstream messaging
-        String downstreamMessage = mssqlC2.downstreamMessage("Start API");
+        String downstreamMessage = mainC2.downstreamMessage("Start API");
         
         // upstream messaging
-        String upstreamMessage = mssqlC2.upstreamMessage(downstreamMessage);
+        String upstreamMessage = mainC2.upstreamMessage(downstreamMessage);
 
         System.out.println("All threads have completed");
+
+        
     }
 
     //Set single output
