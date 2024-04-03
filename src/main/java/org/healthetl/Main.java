@@ -74,6 +74,9 @@ public class Main {
         // t9.start();
         // t10.start();
 
+        //Meta Data Logger example
+        MetaDataLogger.logMetaData("Start C2");
+
         // Setup MSSQL Pipe and Filter
         C2 mainC2 = new C2();
 
@@ -97,7 +100,7 @@ public class Main {
         jsonData.put("age", 30);
         jsonData.put("city", "New York");
         // JSONObject jsonData =
-        s3Writer.writeToS3(jsonData);    
+        s3Writer.writeToS3(jsonData);
     }
 
     //Set single output
