@@ -11,8 +11,8 @@ public class Main {
     private static final DataTypeInfererUtil dataTypeInfererUtil = new DataTypeInfererUtil();
     
     public static void main(String[] args) {
-        String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
-        String AWS_SECRET_KEY = "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";
+        String AWS_ACCESS_KEY = "";
+        String AWS_SECRET_KEY = "";
         String s3BucketName = "cs7319";
 
 
@@ -45,8 +45,8 @@ public class Main {
         final String S3_NAME = "trials_pf";
         final Regions AWS_REGION = Regions.US_EAST_1;
 
-        final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
-        final String AWS_SECRET_KEY = "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";
+        final String AWS_ACCESS_KEY = "";
+        final String AWS_SECRET_KEY = "";
         final String s3BucketName = "cs7319";
         final String s3BasePath = String.format("/base/%s", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
