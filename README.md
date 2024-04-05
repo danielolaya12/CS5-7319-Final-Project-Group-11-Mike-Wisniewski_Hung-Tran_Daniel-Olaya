@@ -47,4 +47,26 @@ candidate architecture styles and the rationales for your final selection.
 
 # TODOS
 - Mike: Finish README & do C2
-- 
+- Project title, final project group number, and team members’ names (1 slide* ) - Hung
+    a. Project title
+    b. Final Project Group XX (Number)
+    c. Each team member’s name, 5319 or 7319 sections, on/off campus
+- Brief project description (1 slide*) [Describe the major capabilities and operational scenarios of your project.] - Hung
+- Architecture Option 1:
+    a. A component diagram showing the components and connectors in the Level 2 architecture (1 slide* ) - Hung
+    b. The class diagram showing the classes and their associations (1 slide* ) - Daniel
+    c. A mapping from each component/connector to its implementing classes in the class diagram (1 slide* ) - Daniel
+- Architecture Option 2: 
+    a. A component diagram showing the components and connectors in the Level 2 architecture (1 slide* )
+    b. The class diagram showing the classes and their associations (1 slide* ) - Mike
+    c. A mapping from each component/connector to its implementing classes in the class diagram (1 slide* ) - Mike
+    
+- Compare and evaluate the pros and cons of each architecture option specifically for
+your system (1 slide* )
+
+- 6. Rationale of your selection (1 slide* )
+        [Describe why the selected architecture option is better suited for your project, e.g., better
+        satisfy specific non-functional properties, etc.]
+- 7. Risk Analysis (Only required for Graduate Students: 2 slides)
+        a. Identify the risky portions of both candidate architecture styles.
+        b. Use the empirical evidence/data (quantitative and qualitative) that are collected through prototyping, simulation, implementation, analysis, and so on.
