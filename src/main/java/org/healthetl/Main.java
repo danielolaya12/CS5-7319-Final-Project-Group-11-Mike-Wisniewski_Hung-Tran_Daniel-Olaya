@@ -31,17 +31,6 @@ public class Main {
         // t1.start();
         // t2.start();
 
-        // //Setup CSV reader
-        // CsvReader csvReader = new CsvReader();
-        // Pipe csvPipe = new Pipe();
-        // DataTypeInferer csvInferer = new DataTypeInferer("csvData");
-        // csvReader.setOut(csvPipe);
-        // csvInferer.setIn(csvPipe);
-        // Thread t3 = new Thread(csvReader);
-        // Thread t4 = new Thread(csvInferer);
-        // t3.start();
-        // t4.start();
-
         // S3Reader s3Reader = new S3Reader("", "", "7319-software-architecture", "healthcare_dataset.csv");
         // Pipe s3Pipe = new Pipe();
         // DataTypeInferer s3Inferer = new DataTypeInferer("s3Data");
@@ -52,52 +41,163 @@ public class Main {
         // t5.start();
         // t6.start();
 
-        // // Setup MSSQL reader
-        // MSSQLPipeline mssqlPipeline = new MSSQLPipeline();
-        // Pipe mssqlPipe = new Pipe();
-        // DataTypeInferer mssqlInferer = new DataTypeInferer("MSSQL");
-        // mssqlPipeline.setOut(mssqlPipe);
-        // mssqlInferer.setIn(mssqlPipe);
-        // Thread t7 = new Thread(mssqlPipeline);
-        // Thread t8 = new Thread(mssqlInferer);
-        // t7.start();
-        // t8.start();
+        // //Meta Data Logger example
+        // MetaDataLogger.logMetaData("Start C2");
 
-        // // Setup PostGres reader
-        // PostgresPipeline postgresPipeline = new PostgresPipeline();
-        // Pipe postgresPipe = new Pipe();
-        // DataTypeInferer postgresInferer = new DataTypeInferer("Postgres");
-        // postgresPipeline.setOut(postgresPipe);
-        // postgresInferer.setIn(postgresPipe);
-        // Thread t9 = new Thread(postgresPipeline);
-        // Thread t10 = new Thread(postgresInferer);
-        // t9.start();
-        // t10.start();
+        // // Setup MSSQL Pipe and Filter
+        // C2 mainC2 = new C2();
 
-        // Setup MSSQL Pipe and Filter
-        C2 mainC2 = new C2();
-
-        // downstream messaging
-        String downstreamMessage = mainC2.downstreamMessage("Start API");
+        // // downstream messaging
+        // String downstreamMessage = mainC2.downstreamMessage("Start API");
         
-        // upstream messaging
-        String upstreamMessage = mainC2.upstreamMessage(downstreamMessage);
+        // // upstream messaging
+        // String upstreamMessage = mainC2.upstreamMessage(downstreamMessage);
 
-        System.out.println("All threads have completed");
+        // System.out.println("All threads have completed");
 
-        // S3 Writer
-        String bucketName = "cs7319/curated/medical/data.csv";
-        String accessKey = "";
-        String secretKey = "";
-        Regions region = Regions.US_EAST_1;
-        S3Writer s3Writer = new S3Writer(bucketName, accessKey, secretKey, region);
-        // Create a mock JSONObject
-        JSONObject jsonData = new JSONObject();
-        jsonData.put("name", "John");
-        jsonData.put("age", 30);
-        jsonData.put("city", "New York");
-        // JSONObject jsonData =
-        s3Writer.writeToS3(jsonData);    
+        // // S3 Writer
+        // String bucketName = "cs7319/curated/medical/data.csv";
+        // String accessKey = "";
+        // String secretKey = "";
+        // Regions region = Regions.US_EAST_1;
+        // S3Writer s3Writer = new S3Writer(bucketName, accessKey, secretKey, region);
+        // // Create a mock JSONObject
+        // JSONObject jsonData = new JSONObject();
+        // jsonData.put("name", "John");
+        // jsonData.put("age", 30);
+        // jsonData.put("city", "New York");
+        // // JSONObject jsonData =
+        // s3Writer.writeToS3(jsonData);
+
+        // static "global" variables
+        String BUCKETNAME_MSSQL_BASE = "cs7319/base/medical";
+        String BUCKETNAME_MSSQL_CURATED = "cs7319/curated/medical";
+        String BUCKETNAME_POSTGRES_BASE = "cs7319/base/operations";
+        String BUCKETNAME_POSTGRES_CURATED = "cs7319/curated/operations";
+        String BUCKETNAME_CSV_BASE = "cs7319/base/patient";
+        String BUCKETNAME_CSV_CURATED = "cs7319/curated/patient";
+        String BUCKETNAME_API_BASE = "cs7319/base/regulatory";
+        String BUCKETNAME_API_CURATED = "cs7319/curated/regulatory";
+        String BUCKETNAME_S3_BASE = "cs7319/base/trials";
+        String BUCKETNAME_S3_CURATED = "cs7319/curated/trials";
+        String AWS_ACCESS_KEY = "";
+        String AWS_SECRET_KEY = "";
+        Regions AWS_REGION = Regions.US_EAST_1;
+
+        // create pipes
+        Pipe inputMSSQLPipe = new Pipe();
+        Pipe outputMSSQLPipe = new Pipe();
+        Pipe inputPostgresPipe = new Pipe();
+        Pipe outputPostgresPipe = new Pipe();
+        Pipe inputCsvPipe = new Pipe();
+        Pipe outputCsvPipe = new Pipe();
+        Pipe outputS3ReaderPipe = new Pipe();
+        
+        // create filter instances
+        MSSQLPipeline mssqlPipeline = new MSSQLPipeline();
+        S3Writer s3WriterMSSQL_base = new S3Writer(BUCKETNAME_MSSQL_BASE, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+        S3Reader s3ReaderMSSQL_base = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKETNAME_MSSQL_BASE, "output.csv");
+        S3Writer s3WriterMSSQL_curated = new S3Writer(BUCKETNAME_MSSQL_CURATED, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+
+        PostgresPipeline postgresPipeline = new PostgresPipeline();
+        S3Writer s3WriterPostgres_base = new S3Writer(BUCKETNAME_POSTGRES_BASE, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+        S3Reader s3ReaderPostgres_base = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKETNAME_POSTGRES_BASE, "output.csv");
+        S3Writer s3WriterPostgres_curated = new S3Writer(BUCKETNAME_POSTGRES_CURATED, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+
+        CsvReader csvReader = new CsvReader();
+        S3Writer s3WriterCsv_base = new S3Writer(BUCKETNAME_CSV_BASE, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+        S3Reader s3ReaderCsv_base = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKETNAME_CSV_BASE, "output.csv");
+        S3Writer s3WriterCsv_curated = new S3Writer(BUCKETNAME_CSV_CURATED, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+
+        
+        // set in and out pipes
+        mssqlPipeline.setIn(inputMSSQLPipe);
+        mssqlPipeline.setOut(outputMSSQLPipe);
+        s3WriterMSSQL_base.setIn(outputMSSQLPipe);
+        s3ReaderMSSQL_base.setOut(outputS3ReaderPipe);
+        s3WriterMSSQL_curated.setIn(outputS3ReaderPipe);
+
+        postgresPipeline.setIn(inputPostgresPipe);
+        postgresPipeline.setOut(outputPostgresPipe);
+        s3WriterPostgres_base.setIn(outputPostgresPipe);
+        s3ReaderPostgres_base.setOut(outputS3ReaderPipe);
+        s3WriterPostgres_curated.setIn(outputS3ReaderPipe);
+
+        csvReader.setIn(inputCsvPipe);
+        csvReader.setOut(outputCsvPipe);
+        s3WriterCsv_base.setIn(outputCsvPipe);
+        s3ReaderCsv_base.setOut(outputS3ReaderPipe);
+        s3WriterCsv_curated.setIn(outputS3ReaderPipe);
+        
+        // create threads
+        Thread mssqlThread = new Thread(mssqlPipeline);
+        Thread s3WriterMSSQLBaseThread = new Thread(s3WriterMSSQL_base);
+        Thread s3ReaderMSSQLThread = new Thread(s3ReaderMSSQL_base);
+        Thread s3WriterMSSQLCuratedThread = new Thread(s3WriterMSSQL_curated);
+
+        Thread postgresThread = new Thread(postgresPipeline);
+        Thread s3WriterPostgresBaseThread = new Thread(s3WriterPostgres_base);
+        Thread s3ReaderPostgresThread = new Thread(s3ReaderPostgres_base);
+        Thread s3WriterPostgresCuratedThread = new Thread(s3WriterPostgres_curated);
+
+        Thread csvThread = new Thread(csvReader);
+        Thread s3WriterCsvBaseThread = new Thread(s3WriterCsv_base);
+        Thread s3ReaderCsvThread = new Thread(s3ReaderCsv_base);
+        Thread s3WriterCsvCuratedThread = new Thread(s3WriterCsv_curated);
+        
+        // start source to base layer threads
+        mssqlThread.start();
+        s3WriterMSSQLBaseThread.start();
+        s3ReaderMSSQLThread.start();
+        s3WriterMSSQLCuratedThread.start();
+        
+        // wait for both threads to finish (if needed)
+        try {
+
+            // base layer
+            mssqlThread.join();
+            s3WriterMSSQLBaseThread.join();
+
+            // curated layer
+            s3ReaderMSSQLThread.join();
+            s3WriterMSSQLCuratedThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // start base to curated layer threads
+        postgresThread.start();
+        s3WriterPostgresBaseThread.start();
+        s3ReaderPostgresThread.start();
+        s3WriterPostgresCuratedThread.start();
+
+        // wait for both threads to finish
+        try {
+            postgresThread.join();
+            s3WriterPostgresBaseThread.join();
+
+            s3ReaderPostgresThread.join();
+            s3WriterPostgresCuratedThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // start base to curated layer threads
+        csvThread.start();
+        s3WriterCsvBaseThread.start();
+        s3ReaderCsvThread.start();
+        s3WriterCsvCuratedThread.start();
+
+        // wait for both threads to finish
+        try {
+            csvThread.join();
+            s3WriterCsvBaseThread.join();
+
+            s3ReaderCsvThread.join();
+            s3WriterCsvCuratedThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //Set single output
@@ -122,23 +222,3 @@ public class Main {
         }
     }
 }
-
-
-        // beginScheduler(while (time != 1PM)){
-        //     {
-            // Starts Pipelines
-            //     Message msg_API = C2Connector_Downstream("Start API");
-            //     Message msg_CSV = C2Connector_Downstream("Start CSV");
-            //     Message msg_MSSQL = C2Connector_Downstream("Start MSSQL");
-
-            // Stops Scheduler
-            //     C2Connector_Upstream(msg_API);
-            //     C2Connector_Upstream(msg_CSV);
-            //     C2Connector_Upstream(msg_MSSQL);
-
-        //         Filter[] filters = new Filter[] {new PostgresPipeline()};
-        //         setOut(filters);
-        //         startFilters(filters);
-        //     }
-            
-        // }
