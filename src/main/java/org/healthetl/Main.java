@@ -22,8 +22,6 @@ public class Main {
         setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
         setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
 
-        MetaDataLogger.logMetaData("Testing the end of logger");
-
         /*
         //Meta Data Logger example
         MetaDataLogger.logMetaData("Start C2");
