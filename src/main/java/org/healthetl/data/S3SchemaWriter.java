@@ -24,8 +24,8 @@ public class S3SchemaWriter {
     public void writeJsonToS3(JSONObject schemaDefinition, String readerService) {
         // AWS creds
         // TODO: change to windows path
-        String kid = "AKIAV2RUR3AD4VVPWSZB";
-        String sak = "dR/rfjYnbKZjIJy2VFxnpMyCGG9wDx6uv+ROFohg";
+        String kid = "";
+        String sak = "";
 
         // set credentials
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(kid, sak);
