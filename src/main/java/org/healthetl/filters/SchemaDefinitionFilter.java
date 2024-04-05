@@ -10,12 +10,10 @@ import java.io.IOException;
 public class SchemaDefinitionFilter extends Filter{
     private final DataTypeInfererUtil dataTypeInferrer;
     private final S3SchemaWriter s3DataWriter;
-    private final String readerName;
 
-    public SchemaDefinitionFilter(DataTypeInfererUtil dataTypeInferrer, S3SchemaWriter s3DataWriter, String readerName) {
+    public SchemaDefinitionFilter(DataTypeInfererUtil dataTypeInferrer, S3SchemaWriter s3DataWriter) {
         this.dataTypeInferrer = dataTypeInferrer;
         this.s3DataWriter = s3DataWriter;
-        this.readerName = readerName;
     }
     @Override
     public void run (){
@@ -42,6 +40,6 @@ public class SchemaDefinitionFilter extends Filter{
         return dataTypeInferrer.inferDataTypes(jsonInput);
     }
     private void writeSchemaToS3(JSONObject schemaDefinition) {
-        s3DataWriter.writeJsonToS3(schemaDefinition, readerName);
+        s3DataWriter.writeJsonToS3(schemaDefinition);
     }
 }

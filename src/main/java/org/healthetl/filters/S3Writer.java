@@ -10,6 +10,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -20,10 +22,12 @@ import java.util.List;
 public class S3Writer extends Filter {
 
     private final String bucketName;
+    private final String pathName;
     private final AmazonS3 s3Client;
 
-    public S3Writer(String bucketName, String accessKey, String secretKey, Regions region) {
+    public S3Writer(String bucketName, String pathName, String accessKey, String secretKey, Regions region) {
         this.bucketName = bucketName;
+        this.pathName = pathName;
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         this.s3Client = AmazonS3ClientBuilder.standard()
                                              .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
@@ -33,21 +37,29 @@ public class S3Writer extends Filter {
 
     @Override
     public void run() {
+        
+        //     List<JSONObject> jsonList = new ArrayList<>();
+        //     JSONObject json;
+        //     while (true) {
+        //         Integer nextValue = input.next();
+        //         json = input.read();
+        //         if (nextValue == 0) {
+        //             break; // Exit the loop if there's no more data
+        //         }
+        //         System.out.println(json);
+        //         jsonList.add(json);
+        //     }
+        //     writeToS3(concatenateToJsonArray(jsonList));
         try {
-            List<JSONObject> jsonList = new ArrayList<>();
-            JSONObject json;
-            while (true) {
-                Integer nextValue = input.next();
-                json = input.read();
-                System.out.println(nextValue);
-                if (nextValue == 0) {
-                    break; // Exit the loop if there's no more data
-                }
-                System.out.println(json);
-                jsonList.add(json);
-            }
-            writeToS3(concatenateToJsonArray(jsonList));
-        } catch (InterruptedException e) {
+            JSONParser parser = new JSONParser();
+            // JSONArray jsonArray = (JSONArray) parser.parse(input.read().toString());
+            Object obj = parser.parse(input.read().toString());
+            JSONArray array = new JSONArray();
+            array.add(obj);
+
+            writeToS3(array);
+
+        } catch (ParseException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -68,7 +80,8 @@ public class S3Writer extends Filter {
         InputStream inputStream = new ByteArrayInputStream(csvData.getBytes(StandardCharsets.UTF_8));
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(csvData.getBytes(StandardCharsets.UTF_8).length);
-        s3Client.putObject(new PutObjectRequest(bucketName, "output.csv", inputStream, metadata));
+        String destinationLocation = bucketName + pathName;
+        s3Client.putObject(new PutObjectRequest(destinationLocation, "output.csv", inputStream, metadata));
         System.out.println("Successfully wrote data to S3.");
     }
 

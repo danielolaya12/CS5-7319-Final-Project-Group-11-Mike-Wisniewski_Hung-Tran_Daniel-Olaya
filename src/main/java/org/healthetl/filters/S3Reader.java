@@ -35,6 +35,7 @@ public class S3Reader extends Filter {
 
     @Override
     public void run() {
+        System.out.println(key);
         try (S3Object s3Object = s3Client.getObject(bucketName, key);
              S3ObjectInputStream inputStream = s3Object.getObjectContent();
              Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {

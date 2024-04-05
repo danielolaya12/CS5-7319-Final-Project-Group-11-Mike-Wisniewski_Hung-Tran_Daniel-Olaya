@@ -43,3 +43,8 @@ your implementation platform, how to install and configure the platform;
 
 4) Elaborate in detail on the difference between the architecture designs for both
 candidate architecture styles and the rationales for your final selection.
+
+
+# TODOS
+- Mike: Finish README & do C2
+- 

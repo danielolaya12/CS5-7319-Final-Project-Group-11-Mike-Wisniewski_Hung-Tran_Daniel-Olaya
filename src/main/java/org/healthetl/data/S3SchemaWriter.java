@@ -16,36 +16,19 @@ import java.io.InputStream;
 public class S3SchemaWriter {
     private final String s3BucketName;
     private final String s3SchemaPath;
+    private final String KEYID;
+    private final String SECRETKEY;
 
-    public S3SchemaWriter(String s3BucketName, String s3SchemaPath) {
+    public S3SchemaWriter(String s3BucketName, String s3SchemaPath, String KEYID, String SECRETKEY) {
         this.s3BucketName = s3BucketName;
         this.s3SchemaPath = s3SchemaPath;
+        this.KEYID = KEYID;
+        this.SECRETKEY = SECRETKEY;
     }
-    public void writeJsonToS3(JSONObject schemaDefinition, String readerService) {
-        // AWS creds
-        // TODO: change to windows path
-        String kid = "";
-        String sak = "";
+    public void writeJsonToS3(JSONObject schemaDefinition) {
 
         // set credentials
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(kid, sak);
-
-        //================================================================
-        /*
-        System.out.println("Into the S3 Writer ===== ");
-        System.out.println(schemaDefinition);
-        System.out.println("======================== ");
-
-        String filename = readerService + ".txt";
-        try(FileWriter myWriter = new FileWriter(filename)) {
-            myWriter.write(schemaDefinition + "\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Finished writing to txt");
-
-         */
-        //================================================================
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(KEYID, SECRETKEY);
 
         // initialize aws access
         AmazonS3 s3Client = AmazonS3ClientBuilder

@@ -21,7 +21,6 @@ public class C2 {
         }
     }
 
-<<<<<<< HEAD
     // public String downstreamMessage(String message) {
     //         if (message.equals("Start API")) {
     //             // run pipeline ingestion
@@ -38,22 +37,4 @@ public class C2 {
     //             return "Invalid message";
     //         }
     //     }
-=======
-    public String downstreamMessage(String message) {
-            if (message.equals("Start API")) {
-                // run pipeline ingestion
-                MSSQLReader mssqlReader = new MSSQLReader();
-                JSONArray jsonObject = mssqlReader.fetchData();
-
-                // run schemaDefinition
-                //SchemaDefinitionFilter schemaDefinitionFilter = new SchemaDefinitionFilter(new DataTypeInfererUtil(), new S3DataWriter());
-                //schemaDefinition.main(jsonObject.toJSONString());
-
-                // upstream message
-                return "Stop API";
-            } else {
-                return "Invalid message";
-            }
-        }
->>>>>>> 3813297a505e6a1262885d40143da5228e0c161e
 }
