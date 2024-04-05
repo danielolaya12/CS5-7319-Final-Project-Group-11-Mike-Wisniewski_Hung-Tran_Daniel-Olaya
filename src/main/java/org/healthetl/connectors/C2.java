@@ -1,10 +1,7 @@
 package org.healthetl.connectors;
 
-import java.io.IOException;
-
 import org.healthetl.filters.*;
 import org.json.simple.JSONArray;
-import org.json.simple.parser.ParseException;
 
 public class C2 {
 
@@ -27,12 +24,12 @@ public class C2 {
     public String downstreamMessage(String message) {
             if (message.equals("Start API")) {
                 // run pipeline ingestion
-                MSSQLPipeline mssqlPipeline = new MSSQLPipeline();
-                JSONArray jsonObject = mssqlPipeline.fetchData();
+                MSSQLReader mssqlReader = new MSSQLReader();
+                JSONArray jsonObject = mssqlReader.fetchData();
 
                 // run schemaDefinition
-                SchemaDefinition schemaDefinition = new SchemaDefinition();
-                schemaDefinition.main(jsonObject.toJSONString());
+                //SchemaDefinitionFilter schemaDefinitionFilter = new SchemaDefinitionFilter(new DataTypeInfererUtil(), new S3DataWriter());
+                //schemaDefinition.main(jsonObject.toJSONString());
 
                 // upstream message
                 return "Stop API";

@@ -30,7 +30,10 @@ public class S3Writer extends Filter {
     @Override
     public void run() {
         try {
-            writeToS3(input.read());
+            JSONObject json;
+            while ((json = input.read()) != null) {
+                writeToS3(json);
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

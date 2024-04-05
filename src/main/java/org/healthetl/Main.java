@@ -1,79 +1,24 @@
 package org.healthetl;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-
-import javax.xml.crypto.Data;
-
-import org.healthetl.connectors.C2;
 import org.healthetl.connectors.Pipe;
+import org.healthetl.data.S3SchemaWriter;
 import org.healthetl.filters.*;
-import org.json.simple.JSONObject;
-
-import com.amazonaws.regions.Regions;
-
+import org.healthetl.utils.DataTypeInfererUtil;
 
 public class Main {
+    private static final String s3BucketName = "cs7319";
+    private static final String s3SchemaPath = "schema_log/schema_definition.json";
+    private static final DataTypeInfererUtil dataTypeInfererUtil = new DataTypeInfererUtil();
+    private static final S3SchemaWriter s3SchemaWriter = new S3SchemaWriter(s3BucketName, s3SchemaPath);
     public static void main(String[] args) {
-        // //Setup API reader
-        // ApiReader apiReader = new ApiReader();
-        // Pipe apiPipe = new Pipe();
-        // DataTypeInferer apiInferer = new DataTypeInferer("ApiData");
-        // apiReader.setOut(apiPipe);
-        // apiInferer.setIn(apiPipe);
-        // Thread t1 = new Thread(apiReader);
-        // Thread t2 = new Thread(apiInferer);
-        // t1.start();
-        // t2.start();
+        setupReader(new CsvReader(), new Pipe(), "CSV");
+        setupReader(new ApiReader(), new Pipe(), "API");
+//        setupReader(new S3Reader("", "", "7319-software-architecture", "healthcare_dataset.csv"), new Pipe(), "S3");
+//        setupReader(new MSSQLReader(), new Pipe(), "MSQL");
+//        setupReader(new PostgresReader(), new Pipe(), "POSTGRES");
 
-        // //Setup CSV reader
-        // CsvReader csvReader = new CsvReader();
-        // Pipe csvPipe = new Pipe();
-        // DataTypeInferer csvInferer = new DataTypeInferer("csvData");
-        // csvReader.setOut(csvPipe);
-        // csvInferer.setIn(csvPipe);
-        // Thread t3 = new Thread(csvReader);
-        // Thread t4 = new Thread(csvInferer);
-        // t3.start();
-        // t4.start();
 
-        // S3Reader s3Reader = new S3Reader("", "", "7319-software-architecture", "healthcare_dataset.csv");
-        // Pipe s3Pipe = new Pipe();
-        // DataTypeInferer s3Inferer = new DataTypeInferer("s3Data");
-        // s3Reader.setOut(s3Pipe);
-        // s3Inferer.setIn(s3Pipe);
-        // Thread t5 = new Thread(s3Reader);
-        // Thread t6 = new Thread(s3Inferer);
-        // t5.start();
-        // t6.start();
-
-        // // Setup MSSQL reader
-        // MSSQLPipeline mssqlPipeline = new MSSQLPipeline();
-        // Pipe mssqlPipe = new Pipe();
-        // DataTypeInferer mssqlInferer = new DataTypeInferer("MSSQL");
-        // mssqlPipeline.setOut(mssqlPipe);
-        // mssqlInferer.setIn(mssqlPipe);
-        // Thread t7 = new Thread(mssqlPipeline);
-        // Thread t8 = new Thread(mssqlInferer);
-        // t7.start();
-        // t8.start();
-
-        // // Setup PostGres reader
-        // PostgresPipeline postgresPipeline = new PostgresPipeline();
-        // Pipe postgresPipe = new Pipe();
-        // DataTypeInferer postgresInferer = new DataTypeInferer("Postgres");
-        // postgresPipeline.setOut(postgresPipe);
-        // postgresInferer.setIn(postgresPipe);
-        // Thread t9 = new Thread(postgresPipeline);
-        // Thread t10 = new Thread(postgresInferer);
-        // t9.start();
-        // t10.start();
-
+        /*
         //Meta Data Logger example
         MetaDataLogger.logMetaData("Start C2");
 
@@ -101,28 +46,17 @@ public class Main {
         jsonData.put("city", "New York");
         // JSONObject jsonData =
         s3Writer.writeToS3(jsonData);
+         */
     }
-
-    //Set single output
-    public static void setOut(Filter[] filters){
-        Pipe p = new Pipe();
-        for(Filter filer: filters){
-            filer.setOut(p);
-        }
-    }
-    private static void startFilters(Runnable[] filters) {
-        for (Runnable filter : filters) {
-            Thread thread = new Thread(filter);
-            thread.start();
-        }
-    }
-
-    public static void connectFilters(Filter[] filters) {
-        for (int i = 0; i < filters.length - 1; i++) {
-            Pipe p = new Pipe();
-            filters[i].setOut(p);
-            filters[i + 1].setIn(p);
-        }
+    private static void setupReader(Filter reader, Pipe pipe, String readerName) {
+        SchemaDefinitionFilter schemaDefinitionFilter = new SchemaDefinitionFilter(dataTypeInfererUtil, s3SchemaWriter, readerName);
+        //DataTypeInfererTest schemaDefinitionFilter = new DataTypeInfererTest(readerName);
+        reader.setOut(pipe);
+        schemaDefinitionFilter.setIn(pipe);
+        Thread readerThread = new Thread(reader);
+        Thread filterThread = new Thread(schemaDefinitionFilter);
+        readerThread.start();
+        filterThread.start();
     }
 }
 
