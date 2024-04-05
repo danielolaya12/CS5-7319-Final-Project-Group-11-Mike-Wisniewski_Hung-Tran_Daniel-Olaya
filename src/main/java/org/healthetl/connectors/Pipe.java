@@ -18,6 +18,15 @@ public class Pipe {
         return jsonArray.removeFirst();
     }
 
+    public synchronized Integer next() {
+        for (JSONObject obj : jsonArray) {
+            if (obj == null) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+
     public synchronized void notifyThreads(){
         try {
             if (Thread.holdsLock(this)) {
