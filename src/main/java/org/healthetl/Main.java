@@ -31,17 +31,6 @@ public class Main {
         // t1.start();
         // t2.start();
 
-        // //Setup CSV reader
-        // CsvReader csvReader = new CsvReader();
-        // Pipe csvPipe = new Pipe();
-        // DataTypeInferer csvInferer = new DataTypeInferer("csvData");
-        // csvReader.setOut(csvPipe);
-        // csvInferer.setIn(csvPipe);
-        // Thread t3 = new Thread(csvReader);
-        // Thread t4 = new Thread(csvInferer);
-        // t3.start();
-        // t4.start();
-
         // S3Reader s3Reader = new S3Reader("", "", "7319-software-architecture", "healthcare_dataset.csv");
         // Pipe s3Pipe = new Pipe();
         // DataTypeInferer s3Inferer = new DataTypeInferer("s3Data");
@@ -100,6 +89,8 @@ public class Main {
         Pipe outputMSSQLPipe = new Pipe();
         Pipe inputPostgresPipe = new Pipe();
         Pipe outputPostgresPipe = new Pipe();
+        Pipe inputCsvPipe = new Pipe();
+        Pipe outputCsvPipe = new Pipe();
         Pipe outputS3ReaderPipe = new Pipe();
         
         // create filter instances
@@ -112,6 +103,11 @@ public class Main {
         S3Writer s3WriterPostgres_base = new S3Writer(BUCKETNAME_POSTGRES_BASE, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
         S3Reader s3ReaderPostgres_base = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKETNAME_POSTGRES_BASE, "output.csv");
         S3Writer s3WriterPostgres_curated = new S3Writer(BUCKETNAME_POSTGRES_CURATED, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+
+        CsvReader csvReader = new CsvReader();
+        S3Writer s3WriterCsv_base = new S3Writer(BUCKETNAME_CSV_BASE, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
+        S3Reader s3ReaderCsv_base = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKETNAME_CSV_BASE, "output.csv");
+        S3Writer s3WriterCsv_curated = new S3Writer(BUCKETNAME_CSV_CURATED, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
 
         
         // set in and out pipes
@@ -126,6 +122,12 @@ public class Main {
         s3WriterPostgres_base.setIn(outputPostgresPipe);
         s3ReaderPostgres_base.setOut(outputS3ReaderPipe);
         s3WriterPostgres_curated.setIn(outputS3ReaderPipe);
+
+        csvReader.setIn(inputCsvPipe);
+        csvReader.setOut(outputCsvPipe);
+        s3WriterCsv_base.setIn(outputCsvPipe);
+        s3ReaderCsv_base.setOut(outputS3ReaderPipe);
+        s3WriterCsv_curated.setIn(outputS3ReaderPipe);
         
         // create threads
         Thread mssqlThread = new Thread(mssqlPipeline);
@@ -137,6 +139,11 @@ public class Main {
         Thread s3WriterPostgresBaseThread = new Thread(s3WriterPostgres_base);
         Thread s3ReaderPostgresThread = new Thread(s3ReaderPostgres_base);
         Thread s3WriterPostgresCuratedThread = new Thread(s3WriterPostgres_curated);
+
+        Thread csvThread = new Thread(csvReader);
+        Thread s3WriterCsvBaseThread = new Thread(s3WriterCsv_base);
+        Thread s3ReaderCsvThread = new Thread(s3ReaderCsv_base);
+        Thread s3WriterCsvCuratedThread = new Thread(s3WriterCsv_curated);
         
         // start source to base layer threads
         mssqlThread.start();
@@ -171,6 +178,23 @@ public class Main {
 
             s3ReaderPostgresThread.join();
             s3WriterPostgresCuratedThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // start base to curated layer threads
+        csvThread.start();
+        s3WriterCsvBaseThread.start();
+        s3ReaderCsvThread.start();
+        s3WriterCsvCuratedThread.start();
+
+        // wait for both threads to finish
+        try {
+            csvThread.join();
+            s3WriterCsvBaseThread.join();
+
+            s3ReaderCsvThread.join();
+            s3WriterCsvCuratedThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
