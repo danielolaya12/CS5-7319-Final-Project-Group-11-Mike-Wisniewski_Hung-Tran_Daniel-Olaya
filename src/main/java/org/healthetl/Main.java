@@ -158,10 +158,6 @@ public class Main {
         // wait for both threads to finish (if needed)
         try {
 
-            // log schema
-            // mssqlThread.join();
-            // mssqlSchemaDefinitionThread.join();
-
             // base layer
             mssqlThread.join();
             s3WriterMSSQLBaseThread.join();
