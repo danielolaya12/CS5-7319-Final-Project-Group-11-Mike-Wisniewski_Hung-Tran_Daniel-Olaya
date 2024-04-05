@@ -29,7 +29,7 @@ public class S3Reader extends Filter {
 
         this.s3Client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-                .withRegion(Regions.US_EAST_2)
+                .withRegion(Regions.US_EAST_1)
                 .build();
     }
 

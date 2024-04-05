@@ -37,6 +37,7 @@ public class S3Writer extends Filter {
     }
 
     public void writeToS3(JSONObject json) {
+        // System.out.println(json);
         // Convert JSON string to CSV
         String csvData = convertJsonToCsv(json);
 
