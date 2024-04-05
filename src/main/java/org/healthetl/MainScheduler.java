@@ -11,8 +11,8 @@ public class MainScheduler {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 52);
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 45);
         calendar.set(Calendar.SECOND, 0);
         Date desiredTime = calendar.getTime();
 

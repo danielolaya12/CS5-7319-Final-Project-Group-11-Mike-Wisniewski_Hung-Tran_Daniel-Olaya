@@ -15,11 +15,14 @@ public class Main {
         String AWS_SECRET_KEY = "dR/rfjYnbKZjIJy2VFxnpMyCGG9wDx6uv+ROFohg";
         String s3BucketName = "cs7319";
 
+
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
         setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
         setupReader(new PostgresReader(), new Pipe(), "operations_pf");
         setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
         setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
+
+        MetaDataLogger.logMetaData("Testing the end of logger");
 
         /*
         //Meta Data Logger example
@@ -30,6 +33,9 @@ public class Main {
     }
     
     private static void setupReader(Filter reader, Pipe pipe, String dataSource) {
+
+        String loggerStringBegin = String.format("Start of %s", dataSource);
+        MetaDataLogger.logMetaData(loggerStringBegin);
 
         // static "global" variables
         final String BUCKETNAME_MSSQL_BASE = "medical_pf";
@@ -76,6 +82,9 @@ public class Main {
         s3WriterBaseThread.start();
         s3ReaderThread.start();
         s3WriterCuratedThread.start();
+
+        String loggerStringEnd = String.format("End of %s", dataSource);
+        MetaDataLogger.logMetaData(loggerStringEnd);
 
         // add in s3reader from base layer
 

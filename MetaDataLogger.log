@@ -1,0 +1,24 @@
+2024-04-05 19:40:19.245 [main] INFO  org.healthetl.filters.MetaDataLogger - Testing the start of logger
+2024-04-05 19:40:19.715 [main] INFO  org.healthetl.filters.MetaDataLogger - Testing the end of logger
+2024-04-05 19:42:32.999 [main] INFO  org.healthetl.filters.MetaDataLogger - Start of patients_pf
+2024-04-05 19:42:33.448 [main] INFO  org.healthetl.filters.MetaDataLogger - End of patients_pf
+2024-04-05 19:42:33.449 [main] INFO  org.healthetl.filters.MetaDataLogger - Start of medical_pf
+2024-04-05 19:42:33.454 [main] INFO  org.healthetl.filters.MetaDataLogger - End of medical_pf
+2024-04-05 19:42:33.454 [main] INFO  org.healthetl.filters.MetaDataLogger - Start of operations_pf
+2024-04-05 19:42:33.461 [main] INFO  org.healthetl.filters.MetaDataLogger - End of operations_pf
+2024-04-05 19:42:33.464 [main] INFO  org.healthetl.filters.MetaDataLogger - Start of trials_pf
+2024-04-05 19:42:33.476 [main] INFO  org.healthetl.filters.MetaDataLogger - End of trials_pf
+2024-04-05 19:42:33.480 [main] INFO  org.healthetl.filters.MetaDataLogger - Start of regulatory_pf
+2024-04-05 19:42:33.488 [main] INFO  org.healthetl.filters.MetaDataLogger - End of regulatory_pf
+2024-04-05 19:42:33.489 [main] INFO  org.healthetl.filters.MetaDataLogger - Testing the end of logger
+2024-04-05 19:45:01.383 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - Start of patients_pf
+2024-04-05 19:45:01.767 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - End of patients_pf
+2024-04-05 19:45:01.767 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - Start of medical_pf
+2024-04-05 19:45:01.771 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - End of medical_pf
+2024-04-05 19:45:01.772 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - Start of operations_pf
+2024-04-05 19:45:01.776 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - End of operations_pf
+2024-04-05 19:45:01.778 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - Start of trials_pf
+2024-04-05 19:45:01.789 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - End of trials_pf
+2024-04-05 19:45:01.790 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - Start of regulatory_pf
+2024-04-05 19:45:01.798 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - End of regulatory_pf
+2024-04-05 19:45:01.798 [pool-1-thread-1] INFO  org.healthetl.filters.MetaDataLogger - Testing the end of logger
