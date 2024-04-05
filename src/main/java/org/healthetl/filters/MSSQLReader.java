@@ -56,7 +56,7 @@ public class MSSQLReader extends Filter {
                 e.printStackTrace();
             }
 
-        System.out.println(jsonArray);
+        // System.out.println(jsonArray);
         return jsonArray;
         }
 
