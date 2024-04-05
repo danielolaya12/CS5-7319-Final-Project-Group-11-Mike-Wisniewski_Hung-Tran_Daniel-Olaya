@@ -1,6 +1,5 @@
 package org.healthetl.filters;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -25,48 +24,69 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 
+public class SchemaDefinition extends Filter {
 
-public class SchemaDefinition {
+    private final String s3BucketName;
+    private final String s3SchemaPath;
+    private final String KEYID;
+    private final String SECRETKEY;
+
+    public SchemaDefinition(String s3BucketName, String s3SchemaPath, String KEYID, String SECRETKEY) {
+        this.s3BucketName = s3BucketName;
+        this.s3SchemaPath = s3SchemaPath;
+        this.KEYID = KEYID;
+        this.SECRETKEY = SECRETKEY;
+    }
+
+    @Override
+    public void run() {
+        try {
+            schemaLog(input.read().toString(), s3BucketName, s3SchemaPath, KEYID, SECRETKEY);
+        } catch (InterruptedException | ParseException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Method to infer data types and write the result to an S3 bucket
-    public static void schemaLog(String jsonInput, String s3BucketName, String s3SchemaPath) throws ParseException, IOException {
+    public static void schemaLog(String jsonInput, String s3BucketName, String s3SchemaPath, String KEYID, String SECRETKEY) throws ParseException, IOException {
 
         // create schema definition
         JSONObject schemaDefinition = inferDataTypes(jsonInput);
 
+        System.out.println(schemaDefinition);
+
         // output to s3
-        writeJsonToS3(schemaDefinition, s3BucketName, s3SchemaPath);
+        writeJsonToS3(schemaDefinition, s3BucketName, s3SchemaPath, KEYID, SECRETKEY);
     }
 
     private static JSONObject inferDataTypes(String jsonInput) {
-
+        JSONObject result = new JSONObject();
+    
         try {
-            // create json objects
-            JSONObject result = new JSONObject();
+            // Parse the JSON input String into a JSONObject
             JSONParser parser = new JSONParser();
-            JSONArray jsonArray = (JSONArray) parser.parse(jsonInput);
-
-            // only need first entry from json -- ASSUMPTION
-            JSONObject firstObject = (JSONObject) jsonArray.get(0);
-
-            // iterate and infer data types
-            for (Object entry : firstObject.entrySet()) {
-                Map.Entry<String, Object> keyValue = (Map.Entry<String, Object>) entry;
-                String key = keyValue.getKey();
-                Object value = keyValue.getValue();
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonInput);
+    
+            // Iterate over all entries in the JSON object
+            for (Object obj : jsonObject.entrySet()) {
+                Map.Entry<String, Object> entry = (Map.Entry<String, Object>) obj;
+                String key = entry.getKey();
+                Object value = entry.getValue();
+    
+                // Infer the data type of the value
                 Class<?> valueType = inferValueType(value);
+    
+                // Put the inferred data type into the result JSON object
                 result.put(key, valueType != null ? valueType.getSimpleName() : "Unknown");
             }
-            return result;
-
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
-        
+    
+        return result;
     }
 
     private static Class<?> inferValueType(Object value) {
@@ -115,15 +135,10 @@ public class SchemaDefinition {
         return null;
     }
 
-    private static void writeJsonToS3(JSONObject json, String s3BucketName, String s3SchemaPath) throws IOException {
-
-        // AWS creds 
-        // TODO: change to windows path
-        String kid = "";
-        String sak = "";
+    private static void writeJsonToS3(JSONObject json, String s3BucketName, String s3SchemaPath, String KEYID, String SECRETKEY) throws IOException {
 
         // set credentials
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(kid, sak);
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(KEYID, SECRETKEY);
 
         // initialize aws access
         AmazonS3 s3Client = AmazonS3ClientBuilder
@@ -220,17 +235,6 @@ public class SchemaDefinition {
             return true;
         } catch (NumberFormatException e) {
             return false;
-        }
-    }
-
-    public static void main(String string) {
-        String jsonInput = string;
-        String s3BucketName = "cs7319";
-        String s3SchemaPath = "schema_log/schema_definition.json";
-        try {
-            schemaLog(jsonInput, s3BucketName, s3SchemaPath);
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
         }
     }
 }

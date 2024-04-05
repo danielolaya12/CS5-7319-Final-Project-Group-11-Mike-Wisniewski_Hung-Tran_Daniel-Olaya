@@ -70,16 +70,16 @@ public class Main {
         // s3Writer.writeToS3(jsonData);
 
         // static "global" variables
-        String BUCKETNAME_MSSQL_BASE = "cs7319/base/medical";
-        String BUCKETNAME_MSSQL_CURATED = "cs7319/curated/medical";
-        String BUCKETNAME_POSTGRES_BASE = "cs7319/base/operations";
-        String BUCKETNAME_POSTGRES_CURATED = "cs7319/curated/operations";
-        String BUCKETNAME_CSV_BASE = "cs7319/base/patient";
-        String BUCKETNAME_CSV_CURATED = "cs7319/curated/patient";
-        String BUCKETNAME_API_BASE = "cs7319/base/regulatory";
-        String BUCKETNAME_API_CURATED = "cs7319/curated/regulatory";
-        String BUCKETNAME_S3_BASE = "cs7319/base/trials";
-        String BUCKETNAME_S3_CURATED = "cs7319/curated/trials";
+        String BUCKETNAME_MSSQL_BASE = "cs7319/base/medical_pf";
+        String BUCKETNAME_MSSQL_CURATED = "cs7319/curated/medical_pf";
+        String BUCKETNAME_POSTGRES_BASE = "cs7319/base/operations_pf";
+        String BUCKETNAME_POSTGRES_CURATED = "cs7319/curated/operations_pf";
+        String BUCKETNAME_CSV_BASE = "cs7319/base/patient_pf";
+        String BUCKETNAME_CSV_CURATED = "cs7319/curated/patient_pf";
+        String BUCKETNAME_API_BASE = "cs7319/base/regulatory_pf";
+        String BUCKETNAME_API_CURATED = "cs7319/curated/regulatory_pf";
+        String BUCKETNAME_S3_BASE = "cs7319/base/trials_pf";
+        String BUCKETNAME_S3_CURATED = "cs7319/curated/trials_pf";
         String AWS_ACCESS_KEY = "";
         String AWS_SECRET_KEY = "";
         Regions AWS_REGION = Regions.US_EAST_1;
@@ -95,6 +95,7 @@ public class Main {
         
         // create filter instances
         MSSQLPipeline mssqlPipeline = new MSSQLPipeline();
+        SchemaDefinition mssqlSchemaDefinition = new SchemaDefinition("cs7319", "schema_log/medical_pf/schema_definition.json", AWS_ACCESS_KEY, AWS_SECRET_KEY);
         S3Writer s3WriterMSSQL_base = new S3Writer(BUCKETNAME_MSSQL_BASE, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
         S3Reader s3ReaderMSSQL_base = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, BUCKETNAME_MSSQL_BASE, "output.csv");
         S3Writer s3WriterMSSQL_curated = new S3Writer(BUCKETNAME_MSSQL_CURATED, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
@@ -113,6 +114,7 @@ public class Main {
         // set in and out pipes
         mssqlPipeline.setIn(inputMSSQLPipe);
         mssqlPipeline.setOut(outputMSSQLPipe);
+        mssqlSchemaDefinition.setIn(outputMSSQLPipe);
         s3WriterMSSQL_base.setIn(outputMSSQLPipe);
         s3ReaderMSSQL_base.setOut(outputS3ReaderPipe);
         s3WriterMSSQL_curated.setIn(outputS3ReaderPipe);
@@ -131,6 +133,7 @@ public class Main {
         
         // create threads
         Thread mssqlThread = new Thread(mssqlPipeline);
+        Thread mssqlSchemaDefinitionThread = new Thread(mssqlSchemaDefinition);
         Thread s3WriterMSSQLBaseThread = new Thread(s3WriterMSSQL_base);
         Thread s3ReaderMSSQLThread = new Thread(s3ReaderMSSQL_base);
         Thread s3WriterMSSQLCuratedThread = new Thread(s3WriterMSSQL_curated);
@@ -147,12 +150,17 @@ public class Main {
         
         // start source to base layer threads
         mssqlThread.start();
+        mssqlSchemaDefinitionThread.start();
         s3WriterMSSQLBaseThread.start();
         s3ReaderMSSQLThread.start();
         s3WriterMSSQLCuratedThread.start();
         
         // wait for both threads to finish (if needed)
         try {
+
+            // log schema
+            // mssqlThread.join();
+            // mssqlSchemaDefinitionThread.join();
 
             // base layer
             mssqlThread.join();
