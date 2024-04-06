@@ -19,11 +19,21 @@ public class Pipe {
     }
 
     public synchronized Integer next() {
-        for (JSONObject obj : jsonArray) {
-            if (obj == null) {
+        Integer startFlag = 1;
+        while (jsonArray.size() != 1 | jsonArray.size() != 0) {
+            startFlag = jsonArray.size();
+            return jsonArray.size();
+        }
+
+        // System.out.println(startFlag);
+        while (jsonArray.size() == 0) {
+            if (startFlag == 0) {
                 return 0;
+            } else {
+                return jsonArray.size();
             }
         }
+
         return 1;
     }
 

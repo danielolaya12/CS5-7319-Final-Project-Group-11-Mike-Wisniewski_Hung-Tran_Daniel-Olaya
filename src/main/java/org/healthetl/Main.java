@@ -11,22 +11,15 @@ public class Main {
     private static final DataTypeInfererUtil dataTypeInfererUtil = new DataTypeInfererUtil();
     
     public static void main(String[] args) {
-        String AWS_ACCESS_KEY = "";
-        String AWS_SECRET_KEY = "";
+        String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
+        String AWS_SECRET_KEY = "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";
         String s3BucketName = "cs7319";
-
 
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
         setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
         setupReader(new PostgresReader(), new Pipe(), "operations_pf");
         setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
-        setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
-
-        /*
-        //Meta Data Logger example
-        MetaDataLogger.logMetaData("Start C2");
-         */
-        
+        setupReader(new ApiReader(), new Pipe(), "regulatory_pf");        
 
     }
     
@@ -36,15 +29,9 @@ public class Main {
         MetaDataLogger.logMetaData(loggerStringBegin);
 
         // static "global" variables
-        final String BUCKETNAME_MSSQL_BASE = "medical_pf";
-        final String BUCKETNAME_POSTGRES_CURATED = "operations_pf";
-        final String CSV_NAME = "patient_pf";
-        final String API_NAME = "regulatory_pf";
-        final String S3_NAME = "trials_pf";
         final Regions AWS_REGION = Regions.US_EAST_1;
-
-        final String AWS_ACCESS_KEY = "";
-        final String AWS_SECRET_KEY = "";
+        final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
+        final String AWS_SECRET_KEY = "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";
         final String s3BucketName = "cs7319";
         final String s3BasePath = String.format("/base/%s", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
@@ -63,7 +50,7 @@ public class Main {
         schemaDefinitionFilter.setIn(pipe);
         s3WriterBase.setIn(pipe);
 
-            // S3 specific
+        // S3 specific
         Pipe s3ReaderPipe = new Pipe(); 
         s3Reader.setOut(s3ReaderPipe);
         s3WriterCurated.setIn(s3ReaderPipe);
@@ -75,10 +62,27 @@ public class Main {
         Thread s3ReaderThread = new Thread(s3Reader);
         Thread s3WriterCuratedThread = new Thread(s3WriterCurated);
 
-        readerThread.start();
-        filterThread.start();
-        s3WriterBaseThread.start();
-        s3ReaderThread.start();
+        
+        try {
+            readerThread.start();
+            filterThread.start();
+            readerThread.join();
+            filterThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("To Threads");
+
+        try {
+            s3WriterBaseThread.start();
+            s3ReaderThread.start();
+            s3WriterBaseThread.join();
+            s3ReaderThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         s3WriterCuratedThread.start();
 
         String loggerStringEnd = String.format("End of %s", dataSource);
