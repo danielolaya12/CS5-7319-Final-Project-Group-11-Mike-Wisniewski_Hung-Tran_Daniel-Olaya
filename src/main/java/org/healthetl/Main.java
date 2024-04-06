@@ -6,8 +6,8 @@ import org.healthetl.filters.*;
 public class Main {
     
     public static void main(String[] args) {
-        String AWS_ACCESS_KEY = "";
-        String AWS_SECRET_KEY = "";
+        String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
+        String AWS_SECRET_KEY = "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";
         String s3BucketName = "cs7319";
 
         setupReader(new CsvReader(), "Start CSV", "patients_c2");
