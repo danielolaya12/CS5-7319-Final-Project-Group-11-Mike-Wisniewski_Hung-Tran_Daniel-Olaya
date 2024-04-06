@@ -27,9 +27,9 @@ public class Main {
         String loggerStringBegin = String.format("Start of %s", dataSource);
         log.info(loggerStringBegin);
 
-        final String s3BasePath = String.format("/base/%s", dataSource);
+        final String s3BasePath = String.format("/base/%s/", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
-        final String s3CuratedPath = String.format("/curated/%s", dataSource);
+        final String s3CuratedPath = String.format("/curated/%s/", dataSource);
         final String s3SchemaPath = String.format("schema_log/%s/schema_definition.json", dataSource);
         final S3SchemaWriter s3SchemaWriter = new S3SchemaWriter(s3BucketName, s3SchemaPath, AWS_ACCESS_KEY, AWS_SECRET_KEY);
 
@@ -62,7 +62,7 @@ public class Main {
             readerThread.join();
             filterThread.join();
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
+            // log.error(e.getMessage());
         }
 
         System.out.println("To Threads");
@@ -73,7 +73,7 @@ public class Main {
             s3WriterBaseThread.join();
             s3ReaderThread.join();
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
+            // log.error(e.getMessage());
         }
 
         s3WriterCuratedThread.start();

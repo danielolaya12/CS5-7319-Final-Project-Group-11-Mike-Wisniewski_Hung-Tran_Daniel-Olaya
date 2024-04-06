@@ -55,7 +55,7 @@ public class S3Writer extends Filter {
             writeToS3(concatenateToJsonArray(jsonList));
 
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
+            // log.error(e.getMessage());
         }
     }
 
@@ -76,6 +76,7 @@ public class S3Writer extends Filter {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(csvData.getBytes(StandardCharsets.UTF_8).length);
         String destinationLocation = bucketName + pathName;
+        log.info(destinationLocation);
         s3Client.putObject(new PutObjectRequest(destinationLocation, "output.csv", inputStream, metadata));
         System.out.println("Successfully wrote data to S3.");
     }

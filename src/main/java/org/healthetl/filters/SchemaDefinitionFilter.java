@@ -19,7 +19,7 @@ public class SchemaDefinitionFilter extends Filter{
         try {
             schemaLog();
         } catch (Exception e){
-            log.error(e.getMessage());
+            // log.error(e.getMessage());
         }
     }
 

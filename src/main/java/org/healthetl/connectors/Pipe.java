@@ -47,7 +47,7 @@ public class Pipe {
                 System.out.println("Current thread does not own the lock on the Pipe object.");
             }
         } catch (Exception e){
-            log.error(e.getMessage());
+            // log.error(e.getMessage());
         }
     }
 }

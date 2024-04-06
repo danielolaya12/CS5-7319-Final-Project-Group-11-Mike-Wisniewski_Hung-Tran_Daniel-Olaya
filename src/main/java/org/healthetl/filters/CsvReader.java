@@ -28,7 +28,7 @@ public class CsvReader extends Filter{
             }
             output.notifyThreads();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            // log.error(e.getMessage());
         }
     }
 }

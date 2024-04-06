@@ -49,7 +49,7 @@ public class MSSQLReader extends Filter {
                 }
                 output.notifyThreads();
             } catch (SQLException e) {
-               log.error(e.getMessage());
+            //    log.error(e.getMessage());
             }
             return jsonArray;
         }

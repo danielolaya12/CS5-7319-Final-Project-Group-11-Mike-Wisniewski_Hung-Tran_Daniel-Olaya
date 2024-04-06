@@ -99,7 +99,7 @@ public class DataTypeInfererUtil {
                 sdf.parse(str);
                 return true;
             } catch (java.text.ParseException e) {
-                log.error(e.getMessage());
+                // log.error(e.getMessage());
             }
         }
 
@@ -129,7 +129,7 @@ public class DataTypeInfererUtil {
                 // if able to pase, then valid ts
                 return true;
             } catch (DateTimeParseException e) {
-                log.error(e.getMessage());
+                // log.error(e.getMessage());
             }
         }
         // if no parse, then invalid ts
