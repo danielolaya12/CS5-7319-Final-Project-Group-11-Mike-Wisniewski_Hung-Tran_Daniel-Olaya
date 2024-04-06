@@ -21,20 +21,22 @@ public class C2 {
         }
     }
 
-    // public String downstreamMessage(String message) {
-    //         if (message.equals("Start API")) {
-    //             // run pipeline ingestion
-    //             MSSQLPipeline mssqlPipeline = new MSSQLPipeline();
-    //             JSONArray jsonObject = mssqlPipeline.fetchData();
+    public String downstreamMessage(String message) {
+            if (message.equals("Start API")) {
+                // run pipeline ingestion
+                MSSQLReader mssqlReader = new MSSQLReader();
+                JSONArray jsonArray = mssqlReader.fetchData();
 
-    //             // run schemaDefinition
-    //             SchemaDefinition schemaDefinition = new SchemaDefinition();
-    //             schemaDefinition.main(jsonObject.toJSONString());
+                // run schemaDefinition
+                SchemaDefinition schemaDefinition = new SchemaDefinition();
+                schemaDefinition.main(jsonArray.toJSONString());
 
-    //             // upstream message
-    //             return "Stop API";
-    //         } else {
-    //             return "Invalid message";
-    //         }
-    //     }
+                // output to base layer
+
+                // upstream message
+                return "Stop API";
+            } else {
+                return "Invalid message";
+            }
+        }
 }
