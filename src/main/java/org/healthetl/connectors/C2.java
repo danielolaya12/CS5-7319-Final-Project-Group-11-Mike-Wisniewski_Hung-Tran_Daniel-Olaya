@@ -28,8 +28,8 @@ public class C2 {
                 JSONArray jsonArray = mssqlReader.fetchData();
 
                 // run schemaDefinition
-                SchemaDefinition schemaDefinition = new SchemaDefinition();
-                schemaDefinition.main(jsonArray.toJSONString());
+                SchemaDefinitionFilter schemaDefinitionFilter = new SchemaDefinitionFilter();
+                schemaDefinitionFilter.run(jsonArray.toJSONString());
 
                 // output to base layer
 
