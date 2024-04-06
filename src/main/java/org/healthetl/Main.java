@@ -2,11 +2,11 @@ package org.healthetl;
 
 import com.amazonaws.regions.Regions;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.healthetl.connectors.Pipe;
 import org.healthetl.data.S3SchemaWriter;
 import org.healthetl.filters.*;
 import org.healthetl.utils.DataTypeInfererUtil;
+
 @Log4j2
 public class Main {
     
