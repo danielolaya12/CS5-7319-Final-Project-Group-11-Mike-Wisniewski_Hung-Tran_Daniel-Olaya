@@ -21,7 +21,6 @@ public class SchemaDefinitionFilter extends Filter{
         } catch (Exception e){
             log.error(e.getMessage());
         }
-
     }
 
     // Method to infer data types and write the result to an S3 bucket
