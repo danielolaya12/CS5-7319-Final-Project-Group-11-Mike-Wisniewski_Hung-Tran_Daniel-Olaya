@@ -1,5 +1,6 @@
 package org.healthetl.utils;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.sql.Timestamp;
@@ -11,12 +12,12 @@ import java.util.Date;
 import java.util.Map;
 
 public class DataTypeInfererUtil {
-    public JSONObject inferDataTypes(JSONObject jsonInput) {
+    public JSONObject inferDataTypes(JSONArray jsonInput) {
         // create json objects
         JSONObject result = new JSONObject();
 
         // only need first entry from json -- ASSUMPTION
-        JSONObject firstObject = jsonInput;
+        JSONObject firstObject = (JSONObject) jsonInput.get(0);
 
         // iterate and infer data types
         for (Object entry : firstObject.entrySet()) {

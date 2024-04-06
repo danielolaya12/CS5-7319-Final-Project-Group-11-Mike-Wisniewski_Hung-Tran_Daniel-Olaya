@@ -16,28 +16,34 @@ public class ApiReader extends Filter {
         callPatientsApi();
     }
 
-    public void callPatientsApi() {
+    public JSONArray callPatientsApi() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/patients"))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
+
+        JSONArray jsonArray = new JSONArray();
+
         try {
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(response.body());
+                JSONArray jsonArrayResponse = (JSONArray) parser.parse(response.body());
 
-                for (Object obj : jsonArray) {
+                for (Object obj : jsonArrayResponse) {
                     JSONObject jsonObject = (JSONObject) obj;
-                    output.write(jsonObject);
+                    jsonArray.add(jsonObject);
+                    // output.write(jsonObject);
                 }
                 //Thread.sleep(2000);
-                output.notifyThreads();
+                // output.notifyThreads();
+
             } else {
                 System.out.println("HTTP request failed with status code: " + response.statusCode());
             }
         } catch (IOException | InterruptedException | ParseException e) {
             System.out.println(e.getMessage());
         }
+        return jsonArray;
     }
 }

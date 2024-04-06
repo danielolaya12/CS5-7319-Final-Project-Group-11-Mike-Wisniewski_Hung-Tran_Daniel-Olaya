@@ -3,6 +3,7 @@ package org.healthetl.filters;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.FileReader;
@@ -13,7 +14,10 @@ public class CsvReader extends Filter{
     public void run (){
         readCsv();
     }
-    private void readCsv() {
+
+    public JSONArray readCsv() {
+        JSONArray jsonArray = new JSONArray();
+
         try (Reader reader = new FileReader("Independent_Medical_Reviews.csv");
              CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader)) {
 
@@ -22,12 +26,15 @@ public class CsvReader extends Filter{
                 for (String header : csvParser.getHeaderNames()) {
                     jsonObject.put(header, csvRecord.get(header));
                 }
-                output.write(jsonObject);
+                jsonArray.add(jsonObject);
+                // output.write(jsonObject);
             }
-            Thread.sleep(2000);
-            output.notifyThreads();
-        } catch (IOException | InterruptedException e) {
+            // Thread.sleep(2000);
+            // output.notifyThreads();
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
+        return jsonArray;
     }
 }

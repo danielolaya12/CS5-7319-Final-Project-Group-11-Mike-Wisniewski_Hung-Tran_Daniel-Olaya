@@ -2,6 +2,8 @@ package org.healthetl;
 
 import com.amazonaws.regions.Regions;
 
+import java.io.IOException;
+
 import org.healthetl.connectors.C2;
 import org.healthetl.connectors.Pipe;
 import org.healthetl.data.S3SchemaWriter;
@@ -17,19 +19,14 @@ public class Main {
         String AWS_SECRET_KEY = "";
         String s3BucketName = "cs7319";
 
-
-        C2 MSSQLC2 = new C2();
-        String upstreamMessage = MSSQLC2.downstreamMessage("Start API");
-        System.out.println(upstreamMessage);
-        // setupReader(new CsvReader(), new Pipe(), "patients_pf");
-        // setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
-        // setupReader(new PostgresReader(), new Pipe(), "operations_pf");
-        // setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
-        // setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
-
+        setupReader(new CsvReader(), "Start CSV", "patients_c2");
+        setupReader(new MSSQLReader(), "Start MSSQL", "medical_c2");
+        setupReader(new PostgresReader(), "Start Postgres", "operations_c2");
+        setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), "Start S3", "trials_c2");
+        setupReader(new ApiReader(), "Start API", "regulatory_c2");
     }
     
-    private static void setupReader(Filter reader, Pipe pipe, String dataSource) {
+    private static void setupReader(Filter reader, String messageString, String dataSource) {
 
         String loggerStringBegin = String.format("Start of %s", dataSource);
         MetaDataLogger.logMetaData(loggerStringBegin);
@@ -40,19 +37,28 @@ public class Main {
         final String CSV_NAME = "patient_pf";
         final String API_NAME = "regulatory_pf";
         final String S3_NAME = "trials_pf";
-        final Regions AWS_REGION = Regions.US_EAST_1;
-
-        final String AWS_ACCESS_KEY = "";
-        final String AWS_SECRET_KEY = "";
+        
         final String s3BucketName = "cs7319";
         final String s3BasePath = String.format("/base/%s", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
         final String s3CuratedPath = String.format("/curated/%s", dataSource);
         final String s3SchemaPath = String.format("schema_log/%s/schema_definition.json", dataSource);
-        final S3SchemaWriter s3SchemaWriter = new S3SchemaWriter(s3BucketName, s3SchemaPath, AWS_ACCESS_KEY, AWS_SECRET_KEY);
+        // final S3SchemaWriter s3SchemaWriter = new S3SchemaWriter(s3BucketName, s3SchemaPath, AWS_ACCESS_KEY, AWS_SECRET_KEY);
+
+        // set up C2 connector
+        C2 C2Connector = new C2();
+        try {
+            String upstreamMessage = C2Connector.downstreamMessageBase(messageString, s3BucketName, s3SchemaPath, s3BasePath, dataSource);
+            String baseLayer = C2Connector.upstreamMessageBase(upstreamMessage, dataSource);
+            String curatedLayer = C2Connector.downstreamMessageCurated(baseLayer, s3BucketName, s3CuratedPath, dataSource);
+            String endString = C2Connector.upstreamMessageCurated(curatedLayer, dataSource);
+            System.out.println(endString);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // set up filters
-        SchemaDefinitionFilter schemaDefinitionFilter = new SchemaDefinitionFilter(dataTypeInfererUtil, s3SchemaWriter);
+        // SchemaDefinitionFilter schemaDefinitionFilter = new SchemaDefinitionFilter(dataTypeInfererUtil, s3SchemaWriter);
         // S3Writer s3WriterBase = new S3Writer(s3BucketName, s3BasePath, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
         // S3Reader s3Reader = new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, s3ReadPath);
         // S3Writer s3WriterCurated = new S3Writer(s3BucketName, s3CuratedPath, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION);
@@ -80,12 +86,7 @@ public class Main {
         // s3ReaderThread.start();
         // s3WriterCuratedThread.start();
 
-        // String loggerStringEnd = String.format("End of %s", dataSource);
-        // MetaDataLogger.logMetaData(loggerStringEnd);
-
-        // add in s3reader from base layer
-
-        // add in s3writer to curated layer
+        
     }
 }
   

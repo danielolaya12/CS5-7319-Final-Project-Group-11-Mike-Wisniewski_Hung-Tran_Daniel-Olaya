@@ -24,7 +24,7 @@ public class PostgresReader extends Filter {
     private final String JDBC_USER = "postgres";
     private final String JDBC_PASSWORD = "postgres1";
 
-    public void fetchData() {
+    public JSONArray fetchData() {
 
         // initialize json array
         JSONArray jsonArray = new JSONArray();
@@ -53,12 +53,13 @@ public class PostgresReader extends Filter {
                 }
                 // add the JSON object representing a row to the array
                 jsonArray.add(jsonObject);
-                output.write(jsonObject);
+                // output.write(jsonObject);
             }
-            output.notifyThreads();
+            // output.notifyThreads();
         } catch (SQLException e) {
             System.err.println("Failed to connect to the PostgreSQL server.");
             e.printStackTrace();
         }
+        return jsonArray;
     }
 }

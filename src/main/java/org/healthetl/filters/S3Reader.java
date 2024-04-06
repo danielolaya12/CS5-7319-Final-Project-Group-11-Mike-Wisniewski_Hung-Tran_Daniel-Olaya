@@ -15,6 +15,7 @@ import java.io.Reader;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class S3Reader extends Filter {
@@ -33,9 +34,9 @@ public class S3Reader extends Filter {
                 .build();
     }
 
-    @Override
-    public void run() {
-        System.out.println(key);
+    public JSONArray fetchData() {
+        JSONArray jsonArray = new JSONArray();
+
         try (S3Object s3Object = s3Client.getObject(bucketName, key);
              S3ObjectInputStream inputStream = s3Object.getObjectContent();
              Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -44,13 +45,18 @@ public class S3Reader extends Filter {
             for (CSVRecord csvRecord : csvParser) {
                 JSONObject jsonObject = new JSONObject();
                 csvParser.getHeaderNames().forEach(header -> jsonObject.put(header, csvRecord.get(header)));
-                output.write(jsonObject);
+                jsonArray.add(jsonObject);
+                // output.write(jsonObject);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return jsonArray;
+    }
 
-
+    @Override
+    public void run() {
+        fetchData();
     }
 }
