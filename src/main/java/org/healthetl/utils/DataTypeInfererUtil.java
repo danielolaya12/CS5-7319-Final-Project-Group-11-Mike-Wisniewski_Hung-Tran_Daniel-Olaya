@@ -1,5 +1,6 @@
 package org.healthetl.utils;
 
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Map;
 
+@Log4j2
 public class DataTypeInfererUtil {
     public JSONObject inferDataTypes(JSONObject jsonInput) {
         // create json objects
@@ -96,7 +98,9 @@ public class DataTypeInfererUtil {
                 // if able to pase, then valid date
                 sdf.parse(str);
                 return true;
-            } catch (java.text.ParseException e) {}
+            } catch (java.text.ParseException e) {
+                log.error(e.getMessage());
+            }
         }
 
         // if no parse, then invalid date
@@ -124,7 +128,9 @@ public class DataTypeInfererUtil {
 
                 // if able to pase, then valid ts
                 return true;
-            } catch (DateTimeParseException e) {}
+            } catch (DateTimeParseException e) {
+                log.error(e.getMessage());
+            }
         }
         // if no parse, then invalid ts
         return false;

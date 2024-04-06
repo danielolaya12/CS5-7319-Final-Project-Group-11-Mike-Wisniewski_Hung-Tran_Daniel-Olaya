@@ -12,13 +12,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.json.simple.JSONObject;
 
+@Log4j2
 public class S3Reader extends Filter {
-
     private AmazonS3 s3Client;
     private final String bucketName;
     private final String key;
@@ -48,9 +49,7 @@ public class S3Reader extends Filter {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
-
-
     }
 }

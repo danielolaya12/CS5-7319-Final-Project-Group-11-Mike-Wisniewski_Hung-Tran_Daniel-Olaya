@@ -1,5 +1,6 @@
 package org.healthetl.filters;
 
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Log4j2
 public class ApiReader extends Filter {
     public void run(){
         callPatientsApi();
@@ -31,13 +33,12 @@ public class ApiReader extends Filter {
                     JSONObject jsonObject = (JSONObject) obj;
                     output.write(jsonObject);
                 }
-                //Thread.sleep(2000);
                 output.notifyThreads();
             } else {
-                System.out.println("HTTP request failed with status code: " + response.statusCode());
+                log.error("HTTP request failed with status code: " + response.statusCode());
             }
         } catch (IOException | InterruptedException | ParseException e) {
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }

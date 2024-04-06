@@ -16,23 +16,28 @@ public class Main {
         String s3BucketName = "cs7319";
 
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
-        setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
-        setupReader(new PostgresReader(), new Pipe(), "operations_pf");
-        setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
-        setupReader(new ApiReader(), new Pipe(), "regulatory_pf");        
+        //setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
+        //setupReader(new PostgresReader(), new Pipe(), "operations_pf");
+        //setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
+        setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
 
     }
     
     private static void setupReader(Filter reader, Pipe pipe, String dataSource) {
-
         String loggerStringBegin = String.format("Start of %s", dataSource);
         MetaDataLogger.logMetaData(loggerStringBegin);
 
         // static "global" variables
-        final Regions AWS_REGION = Regions.US_EAST_1;
+        final Regions AWS_REGION = Regions.US_EAST_2;
         final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
         final String AWS_SECRET_KEY = "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";
-        final String s3BucketName = "cs7319";
+
+        //My Creds
+//        final Regions AWS_REGION = Regions.US_EAST_2;
+//        final String AWS_ACCESS_KEY = "AKIA6ODUZ5YJC5MJSN43";
+//        final String AWS_SECRET_KEY = "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";
+
+        final String s3BucketName = "cs-7319-danielo";
         final String s3BasePath = String.format("/base/%s", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
         final String s3CuratedPath = String.format("/curated/%s", dataSource);

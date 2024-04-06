@@ -1,12 +1,11 @@
 package org.healthetl.filters;
 
+import lombok.extern.log4j.Log4j2;
 import org.healthetl.data.S3SchemaWriter;
 import org.healthetl.utils.DataTypeInfererUtil;
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
-
-
+@Log4j2
 public class SchemaDefinitionFilter extends Filter{
     private final DataTypeInfererUtil dataTypeInferrer;
     private final S3SchemaWriter s3DataWriter;
@@ -20,13 +19,13 @@ public class SchemaDefinitionFilter extends Filter{
         try {
             schemaLog();
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
         }
 
     }
 
     // Method to infer data types and write the result to an S3 bucket
-    public void schemaLog() throws IOException, InterruptedException {
+    public void schemaLog() throws InterruptedException {
         JSONObject json;
         if ((json = input.read()) != null) {
             // create schema definition

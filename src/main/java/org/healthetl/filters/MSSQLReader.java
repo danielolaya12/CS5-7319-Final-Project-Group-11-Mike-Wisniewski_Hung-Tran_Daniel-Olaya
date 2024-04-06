@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
+
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+@Log4j2
 public class MSSQLReader extends Filter {
 
     // main run
@@ -21,14 +24,12 @@ public class MSSQLReader extends Filter {
     private final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
 
     public JSONArray fetchData() {
-
+        log.info("Starting MS SQL Processing");
         // initialize json array
         JSONArray jsonArray = new JSONArray();
-
-        try (// connect to DB url
-            Connection conn = DriverManager.getConnection(DB_URL);
+        // connect to DB url
+        try (Connection conn = DriverManager.getConnection(DB_URL);
             Statement statement = conn.createStatement();) {
-
                 // select all records from the specified table
                 String query = "SELECT * FROM " + "all_prevalences";
 
@@ -53,11 +54,10 @@ public class MSSQLReader extends Filter {
                 }
                 output.notifyThreads();
             } catch (SQLException e) {
-                e.printStackTrace();
+               log.error(e.getMessage());
             }
 
-        // System.out.println(jsonArray);
-        return jsonArray;
+            return jsonArray;
         }
 
     }

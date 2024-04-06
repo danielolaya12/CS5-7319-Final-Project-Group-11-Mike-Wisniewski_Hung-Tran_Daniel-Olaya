@@ -26,7 +26,6 @@ public class S3SchemaWriter {
         this.SECRETKEY = SECRETKEY;
     }
     public void writeJsonToS3(JSONObject schemaDefinition) {
-
         // set credentials
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(KEYID, SECRETKEY);
 

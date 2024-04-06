@@ -33,3 +33,5 @@ bin/
 
 # Ignore build files
 build/
+
+.*.log
