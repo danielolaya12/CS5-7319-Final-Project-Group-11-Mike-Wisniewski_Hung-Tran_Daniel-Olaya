@@ -11,29 +11,22 @@ import org.healthetl.utils.DataTypeInfererUtil;
 public class Main {
     
     private static final DataTypeInfererUtil dataTypeInfererUtil = new DataTypeInfererUtil();
-    
+    private static final Regions AWS_REGION = Regions.US_EAST_2;
+    private static final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
+    private static final String AWS_SECRET_KEY = "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";
+    private static final String s3BucketName = "cs-7319";
     public static void main(String[] args) {
-        String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
-        String AWS_SECRET_KEY = "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";
-        String s3BucketName = "cs7319";
-
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
         setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
         setupReader(new PostgresReader(), new Pipe(), "operations_pf");
         setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
         setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
-
     }
     
     private static void setupReader(Filter reader, Pipe pipe, String dataSource) {
         String loggerStringBegin = String.format("Start of %s", dataSource);
-        MetaDataLogger.logMetaData(loggerStringBegin);
+        log.info(loggerStringBegin);
 
-        // static "global" variables
-        final Regions AWS_REGION = Regions.US_EAST_2;
-        final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
-        final String AWS_SECRET_KEY = "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";
-        final String s3BucketName = "cs-7319";
         final String s3BasePath = String.format("/base/%s", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
         final String s3CuratedPath = String.format("/curated/%s", dataSource);
@@ -86,6 +79,6 @@ public class Main {
         s3WriterCuratedThread.start();
 
         String loggerStringEnd = String.format("End of %s", dataSource);
-        MetaDataLogger.logMetaData(loggerStringEnd);
+        log.info(loggerStringEnd);
     }
 }
