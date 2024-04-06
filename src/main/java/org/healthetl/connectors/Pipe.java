@@ -1,9 +1,11 @@
 package org.healthetl.connectors;
 
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
 
+@Log4j2
 public class Pipe {
     private LinkedList<JSONObject> jsonArray = new LinkedList<>();
     public synchronized void write(JSONObject jsonObject) {
@@ -45,7 +47,7 @@ public class Pipe {
                 System.out.println("Current thread does not own the lock on the Pipe object.");
             }
         } catch (Exception e){
-
+            log.error(e.getMessage());
         }
     }
 }
