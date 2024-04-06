@@ -1,11 +1,13 @@
 package org.healthetl;
 
 import com.amazonaws.regions.Regions;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.healthetl.connectors.Pipe;
 import org.healthetl.data.S3SchemaWriter;
 import org.healthetl.filters.*;
 import org.healthetl.utils.DataTypeInfererUtil;
-
+@Log4j2
 public class Main {
     
     private static final DataTypeInfererUtil dataTypeInfererUtil = new DataTypeInfererUtil();
@@ -16,9 +18,9 @@ public class Main {
         String s3BucketName = "cs7319";
 
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
-        //setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
-        //setupReader(new PostgresReader(), new Pipe(), "operations_pf");
-        //setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
+        setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
+        setupReader(new PostgresReader(), new Pipe(), "operations_pf");
+        setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
         setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
 
     }
@@ -31,13 +33,7 @@ public class Main {
         final Regions AWS_REGION = Regions.US_EAST_2;
         final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
         final String AWS_SECRET_KEY = "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";
-
-        //My Creds
-//        final Regions AWS_REGION = Regions.US_EAST_2;
-//        final String AWS_ACCESS_KEY = "AKIA6ODUZ5YJC5MJSN43";
-//        final String AWS_SECRET_KEY = "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";
-
-        final String s3BucketName = "cs-7319-danielo";
+        final String s3BucketName = "cs-7319";
         final String s3BasePath = String.format("/base/%s", dataSource);
         final String s3ReadPath = String.format("base/%s/output.csv", dataSource);
         final String s3CuratedPath = String.format("/curated/%s", dataSource);
@@ -67,14 +63,13 @@ public class Main {
         Thread s3ReaderThread = new Thread(s3Reader);
         Thread s3WriterCuratedThread = new Thread(s3WriterCurated);
 
-        
         try {
             readerThread.start();
             filterThread.start();
             readerThread.join();
             filterThread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         System.out.println("To Threads");
@@ -85,7 +80,7 @@ public class Main {
             s3WriterBaseThread.join();
             s3ReaderThread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         s3WriterCuratedThread.start();
