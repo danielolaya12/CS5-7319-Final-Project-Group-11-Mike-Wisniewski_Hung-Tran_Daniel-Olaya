@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import java.util.LinkedList;
 
 public class Pipe {
-    LinkedList<JSONObject> jsonArray = new LinkedList<>();
+    private LinkedList<JSONObject> jsonArray = new LinkedList<>();
     public synchronized void write(JSONObject jsonObject) {
         jsonArray.add(jsonObject);
         notify();
