@@ -22,8 +22,9 @@ bin/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+### IDEs ###
 .vscode/
+.idea/
 
 ### Mac OS ###
 .DS_Store
@@ -34,4 +35,4 @@ bin/
 # Ignore build files
 build/
 
-.*.log
+*.log

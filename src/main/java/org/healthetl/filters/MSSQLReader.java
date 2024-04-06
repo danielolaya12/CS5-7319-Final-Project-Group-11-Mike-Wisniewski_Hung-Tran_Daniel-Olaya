@@ -13,18 +13,13 @@ import org.json.simple.JSONObject;
 
 @Log4j2
 public class MSSQLReader extends Filter {
+    private final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
 
-    // main run
     public void run() {
-        // run fetch logic
         fetchData();
     }
 
-    // jdbc url for connecting to SQL Server
-    private final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
-
-    public JSONArray fetchData() {
-        log.info("Starting MS SQL Processing");
+    private JSONArray fetchData() {
         // initialize json array
         JSONArray jsonArray = new JSONArray();
         // connect to DB url
@@ -56,8 +51,6 @@ public class MSSQLReader extends Filter {
             } catch (SQLException e) {
                log.error(e.getMessage());
             }
-
             return jsonArray;
         }
-
     }

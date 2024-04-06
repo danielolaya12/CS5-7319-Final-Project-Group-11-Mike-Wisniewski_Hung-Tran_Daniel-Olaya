@@ -11,10 +11,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class PostgresReader extends Filter {
-
-    // main run
+    
     public void run() {
-        
         // run fetch logic
         fetchData();
     }

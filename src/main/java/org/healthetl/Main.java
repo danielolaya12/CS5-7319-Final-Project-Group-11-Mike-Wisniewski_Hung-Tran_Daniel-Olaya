@@ -11,10 +11,10 @@ import org.healthetl.utils.DataTypeInfererUtil;
 public class Main {
     
     private static final DataTypeInfererUtil dataTypeInfererUtil = new DataTypeInfererUtil();
-    private static final Regions AWS_REGION = Regions.US_EAST_2;
+    private static final Regions AWS_REGION = Regions.US_EAST_1;
     private static final String AWS_ACCESS_KEY = "AKIAV2RUR3AD4VVPWSZB";
     private static final String AWS_SECRET_KEY = "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";
-    private static final String s3BucketName = "cs-7319";
+    private static final String s3BucketName = "cs7319";
     public static void main(String[] args) {
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
         setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
