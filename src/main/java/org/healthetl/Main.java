@@ -17,9 +17,9 @@ public class Main {
     private static final String s3BucketName = "cs7319";
     public static void main(String[] args) {
         setupReader(new CsvReader(), new Pipe(), "patients_pf");
-        setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
-        setupReader(new PostgresReader(), new Pipe(), "operations_pf");
-        setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
+//        setupReader(new MSSQLReader(), new Pipe(), "medical_pf");
+//        setupReader(new PostgresReader(), new Pipe(), "operations_pf");
+//        setupReader(new S3Reader(AWS_ACCESS_KEY, AWS_SECRET_KEY, s3BucketName, "inbound/medications.csv"), new Pipe(), "trials_pf");
         setupReader(new ApiReader(), new Pipe(), "regulatory_pf");
     }
     

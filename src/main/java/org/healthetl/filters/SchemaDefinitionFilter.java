@@ -7,11 +7,11 @@ import org.json.simple.JSONObject;
 
 @Log4j2
 public class SchemaDefinitionFilter extends Filter{
-    private final DataTypeInfererUtil dataTypeInferrer;
+    private final DataTypeInfererUtil dataTypeInferer;
     private final S3SchemaWriter s3DataWriter;
 
-    public SchemaDefinitionFilter(DataTypeInfererUtil dataTypeInferrer, S3SchemaWriter s3DataWriter) {
-        this.dataTypeInferrer = dataTypeInferrer;
+    public SchemaDefinitionFilter(DataTypeInfererUtil dataTypeInferer, S3SchemaWriter s3DataWriter) {
+        this.dataTypeInferer = dataTypeInferer;
         this.s3DataWriter = s3DataWriter;
     }
     @Override
@@ -19,12 +19,12 @@ public class SchemaDefinitionFilter extends Filter{
         try {
             schemaLog();
         } catch (Exception e){
-            // log.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
     // Method to infer data types and write the result to an S3 bucket
-    public void schemaLog() throws InterruptedException {
+    private void schemaLog() throws InterruptedException {
         JSONObject json;
         if ((json = input.read()) != null) {
             // create schema definition
@@ -35,7 +35,7 @@ public class SchemaDefinitionFilter extends Filter{
     }
 
     private JSONObject inferSchemaDefinition(JSONObject jsonInput) {
-        return dataTypeInferrer.inferDataTypes(jsonInput);
+        return dataTypeInferer.inferDataTypes(jsonInput);
     }
     private void writeSchemaToS3(JSONObject schemaDefinition) {
         s3DataWriter.writeJsonToS3(schemaDefinition);
