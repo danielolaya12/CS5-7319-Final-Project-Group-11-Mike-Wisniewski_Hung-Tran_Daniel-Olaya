@@ -32,7 +32,28 @@ your implementation platform, how to install and configure the platform;
 ### Setting Up MSSQL
 1. Download SSMS from Microsoft: https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16#download-ssms
 2. Navigate through the prompts to install the latest version of SSMS
-3. 
+3. Download SQL Server: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+4. Follow the prompts for SQL Server, install a basic installation
+    1. Note your key installation credentials like Instance Name, Administrators, and Connection String
+    2. The team's example is as follows: MSSQLSERVER01, DESKTOP-BBB6R7K\EV-04, Server=localhost\MSSQLSERVER01;Database=master;Trusted_Connection=True;
+5. Launch the SQL Server Configuration Manager
+6. Under SQL Server Network Configuration, locate Protocols for <Instance Name>
+7. Change the TCP/IP from Disabled to Enabled
+8. Perform any machine resets as required
+9. Launch SSMS and put localhost as the Server name
+10. In localhost, create a new database called medical
+11. Right click on medical, go to tasks and select Import Data
+12. Hit next on the first prompt
+13. Data Source will be selected as Flat File
+14. Navigate to the root project directory
+15. The file location will be under data/ called all_prevelances.csv
+16. Select this file as the data source file
+    1. On the left hand side, click Advanced
+    2. Click ITEM and change the DataType from String to "text stream"
+17. When prompted for the destination, choose SQL Server Native Client 11.0
+18. Fill in the Server Name details - the Server Name should be localhost, Authentication keep at Windows Auth, Database will be medical
+19. In Next, Edit Mappings.  Ensure ITEM is set to varchar and the chracter length is "max"
+20. Execute the import Wizard query
 
 ### Setting Up PostGres
 1. Install Postgres (PgAdmin) in your computer. Use port 5432 and postgres1 as password for postgres – i.e. username/password – postgres/postgres1 - Postgres server 12 will be fine. (https://www.youtube.com/watch?v=0n41UTkOBb0 )
@@ -143,7 +164,7 @@ your implementation platform, how to install and configure the platform;
     2. Although the team can provide credentials upon request, there will need to be coordination if verification is required to view the contents of the buckets
 3. In MSSQLReader.java, replace line 16 with the respective DB_URL
     1. The team used a local machine and had this string as the DB_URL: jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true
-    2. Most likely, others wanting to implement this will need to replace DESKTOP-BBB6R7K with the specified local user as created in "Setting Up MSSQL".
+    2. Most likely, others wanting to implement this will need to replace DESKTOP-BBB6R7K with the specified local user as created in "Setting Up MSSQL".  Most likely this will be replaced with "localhost"
 
 ## Architectural Style
 

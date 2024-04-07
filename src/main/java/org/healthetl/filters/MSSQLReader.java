@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 
 @Log4j2
 public class MSSQLReader extends Filter {
-    private final String DB_URL = "jdbc:sqlserver://DESKTOP-BBB6R7K;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
+    private final String DB_URL = "jdbc:sqlserver://localhost;databaseName=medical;integratedSecurity=true;trustServerCertificate=true";
 
     public void run() {
         fetchData();
