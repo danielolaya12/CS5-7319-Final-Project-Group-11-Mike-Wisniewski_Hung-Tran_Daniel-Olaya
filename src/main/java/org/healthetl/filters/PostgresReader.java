@@ -18,7 +18,7 @@ public class PostgresReader extends Filter {
     }
 
     // JDBC URL, username, and password of PostgreSQL server
-    private final String JDBC_URL = "jdbc:postgresql://localhost:5432/catcards";
+    private final String JDBC_URL = "jdbc:postgresql://localhost:5432/DiabetesDB";
     private final String JDBC_USER = "postgres";
     private final String JDBC_PASSWORD = "postgres1";
 
@@ -32,7 +32,7 @@ public class PostgresReader extends Filter {
         Statement statement = connection.createStatement();) {
 
             // select all records from the specified table
-            String query = "SELECT * FROM " + "testimport";
+            String query = "SELECT * FROM " + "patient_data";
 
             // execute the query as result set
             ResultSet resultSet = statement.executeQuery(query);
