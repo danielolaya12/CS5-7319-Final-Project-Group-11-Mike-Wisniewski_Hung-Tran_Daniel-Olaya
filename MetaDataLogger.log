@@ -168,3 +168,23 @@ Run 10
 2024-04-07 15:33:15.038 [main] INFO  org.healthetl.Main - End of trials_pf
 2024-04-07 15:33:35.094 [main] INFO  org.healthetl.Main - Start of medical_pf
 2024-04-07 15:33:36.369 [main] INFO  org.healthetl.Main - End of medical_pf
+2024-04-07 18:40:28.856 [main] INFO  org.healthetl.Main - Start of patients_pf
+2024-04-07 18:40:30.688 [main] INFO  org.healthetl.Main - End of patients_pf
+2024-04-07 18:40:30.689 [main] INFO  org.healthetl.Main - Start of medical_pf
+2024-04-07 18:40:31.071 [main] INFO  org.healthetl.Main - End of medical_pf
+2024-04-07 18:40:31.072 [main] INFO  org.healthetl.Main - Start of operations_pf
+2024-04-07 18:40:32.168 [main] INFO  org.healthetl.Main - End of operations_pf
+2024-04-07 18:40:32.169 [main] INFO  org.healthetl.Main - Start of trials_pf
+2024-04-07 18:40:33.022 [main] INFO  org.healthetl.Main - End of trials_pf
+2024-04-07 18:40:33.023 [main] INFO  org.healthetl.Main - Start of regulatory_pf
+2024-04-07 18:40:33.086 [Thread-20] ERROR org.healthetl.filters.ApiReader - null
+2024-04-07 18:40:56.279 [main] INFO  org.healthetl.Main - Start of patients_pf
+2024-04-07 18:40:58.558 [main] INFO  org.healthetl.Main - End of patients_pf
+2024-04-07 18:40:58.559 [main] INFO  org.healthetl.Main - Start of medical_pf
+2024-04-07 18:40:58.904 [main] INFO  org.healthetl.Main - End of medical_pf
+2024-04-07 18:40:58.905 [main] INFO  org.healthetl.Main - Start of operations_pf
+2024-04-07 18:40:59.822 [main] INFO  org.healthetl.Main - End of operations_pf
+2024-04-07 18:40:59.824 [main] INFO  org.healthetl.Main - Start of trials_pf
+2024-04-07 18:41:00.963 [main] INFO  org.healthetl.Main - End of trials_pf
+2024-04-07 18:41:00.963 [main] INFO  org.healthetl.Main - Start of regulatory_pf
+2024-04-07 18:41:03.494 [main] INFO  org.healthetl.Main - End of regulatory_pf

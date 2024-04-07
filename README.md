@@ -168,32 +168,43 @@ your implementation platform, how to install and configure the platform;
 
 ## Architectural Style
 
-4) Elaborate in detail on the difference between the architecture designs for both
-candidate architecture styles and the rationales for your final selection.
+#### Pipe and Filter
+The team identified the following as Pros for the Pipe and Filter architecture:
 
+- The Pipe and Filter architecture allowed the team to reuse software components with ease
+- This is apparent when reusing both our s3Reader.java and s3Writer.java classes
+- The architecture allowed for our code to be modularized and our Main function follows this approach, making it easy for us to scale up if more data sources are required
+- The methods used in Pipe and Filter allow for concurrency without risk of affecting data ACIDity
+- Simplicity in development; Pipe and Filter methods were simple to develop as general logic was straightforward given the architectural design
+- Each method does a specific, unique task offering separation of concerns
+- Simple connectors
 
-# TODOS
+However, there are a list of cons the team considered:
 
-- Project title, final project group number, and team members’ names (1 slide* ) - Hung
-    a. Project title
-    b. Final Project Group XX (Number)
-    c. Each team member’s name, 5319 or 7319 sections, on/off campus
-- Brief project description (1 slide*) [Describe the major capabilities and operational scenarios of your project.] - Hung
-- Architecture Option 1:
-    a. A component diagram showing the components and connectors in the Level 2 architecture (1 slide* ) - Hung
-    b. The class diagram showing the classes and their associations (1 slide* ) - Daniel
-    c. A mapping from each component/connector to its implementing classes in the class diagram (1 slide* ) - Daniel
-- Architecture Option 2: 
-    a. A component diagram showing the components and connectors in the Level 2 architecture (1 slide* )
-    b. The class diagram showing the classes and their associations (1 slide* ) - Mike
-    c. A mapping from each component/connector to its implementing classes in the class diagram (1 slide* ) - Mike
-    
-- Compare and evaluate the pros and cons of each architecture option specifically for
-your system (1 slide* )
+- The team found it difficult to handle errors; it seems that there were multiple different areas where specific errors had to be handled and there was no general way to handle these errors effectively
+- The architecture and implementation for this problem allowed for some concurrency, but there were areas in the chain of command that could not allow concurrency or else we would introduce data inconsistency
+    - I.e. Base layer operations must be completed before curated layer operations
+- If multiple pipe and filters were needed, the team assessed that this could be consequential for this architecture; the handling of data sources can scale relatively easily, but the introduction of exponential amounts of pipes or filters will not
+- Methods are coupled; although not an explicit con, this means that certain methods are dependent on the run and execution of other methods
 
-- 6. Rationale of your selection (1 slide* )
-        [Describe why the selected architecture option is better suited for your project, e.g., better
-        satisfy specific non-functional properties, etc.]
-- 7. Risk Analysis (Only required for Graduate Students: 2 slides)
-        a. Identify the risky portions of both candidate architecture styles.
-        b. Use the empirical evidence/data (quantitative and qualitative) that are collected through prototyping, simulation, implementation, analysis, and so on.
+#### C2 Connector
+- The team identified the following as Pros for the C2 architecture:
+- C2 offers decoupled or very loose coupling of our components; often our components are only dependent on objects or data streams as input parameters, whereas Pipe and Filter required methods to complete and signal before the next method could execute
+- The C2 development was relatively easy to refactor from the Pipe and Filter components because the core logics are the same, but the returns are different
+- The team found it easier to identify areas where the code was not performing as intended due to better fault isolation inherent within C2
+- Error logging was much easier and more efficient to understand and implement into C2; the team often found that there were no specialized error handles required for most of the components
+- The component connectors interacted the same way because the C2 connector is interoperable
+
+However, there are a list of cons to consider for this architecture:
+- It appeared that C2 was more overhead heavy; processes would take longer compared to the Pipe and Filter architecture – we did not capture CPU usage for this, but it is an unqualified observation
+- There was an increase latency with C2, and this was captured by the team as part of the Risk Analysis
+- The team found that if the C2 architecture is used, it may introduce too many connectors and connecting interfaces to properly scale for a data ingestion problem
+- Complex connectors
+
+#### Architectural Decision
+After consideration into the pros and cons for each architecture, and after implementing and analyzing both architectures, the team narrowed on using Pipe and Filter as the architecture of choice.  The team centered and concluded this decision on three key differentiators:
+
+- Pipe and Filter is easier and more intuitive to implement than C2 for a data ingestion problem
+- Future scalability is a main requirement for most data ingestion exercises – we believe P&F offers a better scalability option
+- Concurrency implementation in methods offers a more efficient approach to data ingestions
+
