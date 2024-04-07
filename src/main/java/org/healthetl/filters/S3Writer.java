@@ -55,7 +55,7 @@ public class S3Writer extends Filter {
             writeToS3(concatenateToJsonArray(jsonList));
 
         } catch (InterruptedException e) {
-            // log.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ public class S3Writer extends Filter {
         return jsonArray;
     }
 
-    public void writeToS3(JSONArray jsonArray) {
+    private void writeToS3(JSONArray jsonArray) {
         // Convert JSON array to CSV
         String csvData = convertJsonArrayToCsv(jsonArray);
     

@@ -11,18 +11,16 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class PostgresReader extends Filter {
-    
+    // JDBC URL, username, and password of PostgreSQL server
+    private final String JDBC_URL = "jdbc:postgresql://localhost:5432/DiabetesDB";
+    private final String JDBC_USER = "postgres";
+    private final String JDBC_PASSWORD = "postgres1";
     public void run() {
         // run fetch logic
         fetchData();
     }
 
-    // JDBC URL, username, and password of PostgreSQL server
-    private final String JDBC_URL = "jdbc:postgresql://localhost:5432/DiabetesDB";
-    private final String JDBC_USER = "postgres";
-    private final String JDBC_PASSWORD = "postgres1";
-
-    public void fetchData() {
+    private void fetchData() {
 
         // initialize json array
         JSONArray jsonArray = new JSONArray();
